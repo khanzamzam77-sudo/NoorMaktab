@@ -1,0 +1,724 @@
+<!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1b2150"><title>Noor Maktab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Mukta:wght@400;600;700&family=Yatra+One&display=swap">
+<style>
+/* Layout: app shell — top bar, tabs (Duaen / Display / Video / Sabak); dua reader card with animated star-pattern stage */
+:root{
+  --bg:#f6f3ec; --surface:#fffdf8; --ink:#1d2340; --muted:#5b6080; --line:#e3dccb;
+  --night:#1b2150; --gold:#c08a1e; --gold-soft:#f3e3bd; --hl:#fff1c9;
+  --stage-ink:#fdf7e8; --ok:#2f7d55;
+  --f-ar:"Amiri","Scheherazade New","Traditional Arabic",serif;
+  --f-body:"Mukta","Noto Sans Devanagari","Segoe UI",sans-serif;
+  --f-disp:"Yatra One","Mukta",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10132a; --surface:#181c3a; --ink:#ece8dc; --muted:#a3a7c4; --line:#2b3060;
+  --night:#0b0e22; --gold:#e3b04b; --gold-soft:#3a3420; --hl:#4a3f1c; --stage-ink:#fdf7e8; --ok:#5fbf8a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10132a; --surface:#181c3a; --ink:#ece8dc; --muted:#a3a7c4; --line:#2b3060;
+  --night:#0b0e22; --gold:#e3b04b; --gold-soft:#3a3420; --hl:#4a3f1c; --stage-ink:#fdf7e8; --ok:#5fbf8a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:12px 40px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.brand h1{font-family:var(--f-disp);font-weight:400;font-size:1.7rem;margin:0;color:var(--ink)}
+.brand small{color:var(--muted);display:block;font-size:.85rem;line-height:1.2}
+.prog{font-size:.9rem;color:var(--muted)}
+.prog b{color:var(--gold)}
+nav.tabs{display:flex;gap:6px;margin-block:14px;overflow-x:auto;padding-bottom:4px}
+nav.tabs button{font:600 .95rem var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 16px;border-radius:999px;cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{background:var(--night);color:var(--stage-ink);border-color:var(--night)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.grid{display:grid;grid-template-columns:280px 1fr;gap:18px}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+.list{display:flex;flex-direction:column;gap:6px;min-width:0}
+.cat{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.item{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;font:inherit;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer}
+.item[aria-current="true"]{border-color:var(--gold);box-shadow:inset 3px 0 0 var(--gold)}
+.item .ar{font-family:var(--f-ar);font-size:1.05rem;color:var(--muted);direction:rtl}
+.done{color:var(--ok);font-weight:700}
+@media (max-width:760px){.list{max-height:240px}.item .ar{display:none}}
+.reader{min-width:0;display:flex;flex-direction:column;gap:14px}
+.stage{position:relative;background:var(--night);color:var(--stage-ink);border-radius:18px;overflow:hidden;padding:28px 20px;min-height:280px;display:flex;flex-direction:column;justify-content:center;gap:16px}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.35;pointer-events:none}
+.stage > *:not(canvas){position:relative}
+.occ{font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
+.title{font-family:var(--f-disp);font-size:1.5rem;margin:0;text-wrap:balance}
+.words{direction:rtl;display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font-family:var(--f-ar);font-size:clamp(1.9rem,5vw,2.8rem);line-height:1.9}
+.w{display:inline-flex;flex-direction:column;align-items:center;padding:0 6px;border-radius:10px;transition:background .25s,color .25s,transform .25s;cursor:pointer}
+.w .tr{direction:ltr;font-family:var(--f-body);font-size:.9rem;line-height:1.2;color:#c9c6e6;opacity:.9}
+.w.on{background:var(--gold);color:#1b1608;transform:translateY(-3px) scale(1.06)}
+.w.on .tr{color:#1b1608}
+.w.past{color:#f0d898}
+.hide-ar .w:not(.on):not(.past) .a{filter:blur(7px)}
+.tarjuma{font-size:1.15rem;text-align:center;max-width:60ch;margin:0 auto;color:#efe9d6}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{font:600 .95rem var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 14px;border-radius:10px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#1b1608}
+.btn[aria-pressed="true"]{background:var(--gold-soft);border-color:var(--gold)}
+label.ctl{display:flex;align-items:center;gap:6px;font-size:.9rem;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h3{margin:0 0 6px;font-family:var(--f-disp);font-weight:400;font-size:1.15rem}
+.note{font-size:.85rem;color:var(--muted)}
+.file{font-size:.9rem}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.meta{grid-template-columns:1fr}}
+.meta p{margin:0}
+.side{display:flex;flex-direction:column;gap:8px;min-width:0}
+.side input,.side select,.ctl select{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);width:100%}
+.ctl select{width:auto;padding:4px 8px}
+.list{max-height:70vh;overflow-y:auto;padding-right:4px}
+.num{display:inline-block;min-width:1.8em;color:var(--gold);font-variant-numeric:tabular-nums;font-weight:700}
+.has{color:var(--gold)}
+.src{font-size:.85rem;color:var(--muted);background:var(--gold-soft);padding:4px 10px;border-radius:999px}
+.qari{display:inline-block;margin-top:8px;color:var(--gold);font-weight:600}
+/* Display mode */
+#display .stage{min-height:62vh}
+#display .words{font-size:clamp(2.4rem,7vw,4.6rem)}
+#display .tarjuma{font-size:clamp(1.2rem,2.6vw,1.8rem)}
+.fs-stage:fullscreen{border-radius:0;padding:5vh 5vw}
+/* Video */
+.vbox{position:relative;border-radius:16px;overflow:hidden;background:var(--night);aspect-ratio:16/9;max-width:100%}
+.vbox video{width:100%;height:100%;object-fit:cover;display:block}
+.vbox .ov{position:absolute;inset:auto 0 0 0;padding:18px;background:linear-gradient(transparent,rgba(8,10,30,.85));color:#fdf7e8;display:flex;flex-direction:column;gap:6px}
+.vbox .ov .words{font-size:clamp(1.3rem,4vw,2.4rem);line-height:1.7}
+.vbox .ov .tarjuma{font-size:clamp(.9rem,2vw,1.15rem)}
+.vbox .empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#c9c6e6;text-align:center;padding:20px}
+/* Sabak */
+.lessons{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.lessons ol,.lessons ul{margin:6px 0 0;padding-left:22px}
+.lessons li{margin-bottom:4px}
+@media (prefers-reduced-motion:reduce){.w{transition:none}.w.on{transform:none}}
+</style><style>html{-webkit-text-size-adjust:100%}body{margin:0;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style></head><body><script>
+/* Android: connects the page's speech calls to the phone's own text-to-speech engine */
+(function(){if(!window.AndroidTTS)return;
+  var pend={},n=0,voices=[];
+  function refresh(){try{voices=JSON.parse(AndroidTTS.voices()||"[]")}catch(e){voices=[]}}
+  var ss={getVoices:function(){refresh();return voices},
+    speak:function(u){var id=String(++n);pend[id]=u;AndroidTTS.speak(u.text,u.lang||"ar",u.rate||1,id,(u.voice&&u.voice.voiceURI)||"")},
+    cancel:function(){AndroidTTS.stop();Object.keys(pend).forEach(function(id){var u=pend[id];delete pend[id];u.onend&&u.onend({})})},
+    onvoiceschanged:null};
+  window.SpeechSynthesisUtterance=function(t){this.text=t;this.lang="";this.rate=1;this.voice=null};
+  try{Object.defineProperty(window,"speechSynthesis",{value:ss,configurable:true,writable:true})}catch(e){window.speechSynthesis=ss}
+  window.__tts=function(id,ev,a){var u=pend[id];if(!u)return;
+    if(ev==="start"){u.onstart&&u.onstart({})}
+    else if(ev==="range"){u.onboundary&&u.onboundary({name:"word",charIndex:a})}
+    else{delete pend[id];var f=ev==="error"?u.onerror:u.onend;f&&f({})}};
+  window.__ttsReady=function(){refresh();ss.onvoiceschanged&&ss.onvoiceschanged()};
+})();
+</script>
+
+<div class="wrap">
+<header>
+  <div class="brand">
+    <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="var(--gold)" stroke-width="2"><rect x="8" y="8" width="24" height="24"/><rect x="8" y="8" width="24" height="24" transform="rotate(45 20 20)"/></g><circle cx="20" cy="20" r="4" fill="var(--gold)"/></svg>
+    <div><h1>Noor Maktab</h1><small>Duaen • Tarjuma • Deen ki Taleem</small></div>
+  </div>
+  <div class="prog">Yaad ki hui duaen: <b id="progN">0</b> / <span id="progT">0</span></div>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" data-tab="duaen" aria-selected="true">Duaen</button>
+  <button role="tab" data-tab="display" aria-selected="false">Display (Class)</button>
+  <button role="tab" data-tab="video" aria-selected="false">Video ke saath</button>
+  <button role="tab" data-tab="sabak" aria-selected="false">Sabak</button>
+</nav>
+
+<!-- DUAEN -->
+<section id="duaen">
+  <div class="grid">
+    <div class="side">
+      <input type="search" id="q1" placeholder="Dua dhoondein: khana, safar, namaz…" aria-label="Dua dhoondein">
+      <select id="cat1" aria-label="Qism"></select>
+      <div class="list" id="list"></div>
+    </div>
+    <div class="reader">
+      <div class="stage" id="stage1">
+        <canvas class="pat"></canvas>
+        <div class="occ" id="occ1"></div>
+        <h2 class="title" id="title1"></h2>
+        <div class="words" id="words1"></div>
+        <p class="tarjuma" id="tar1"></p>
+      </div>
+      <div class="bar">
+        <button class="btn" id="prev1" aria-label="Pichhli dua">◀</button>
+        <button class="btn primary" id="play1">🔊 Audio ke saath chalayein</button>
+        <button class="btn" id="next1" aria-label="Agli dua">▶▶</button>
+        <button class="btn" id="speak1" aria-pressed="true">🔊 Awaaz</button>
+        <button class="btn" id="cont1" aria-pressed="false">⟳ Lagataar (agli dua bhi)</button>
+        <button class="btn" id="hindi1" aria-pressed="false">🗣 Tarjuma bhi sunao</button>
+        <button class="btn" id="hide1" aria-pressed="false">Yaad karo (chhupao)</button>
+        <button class="btn" id="mark1">✓ Yaad ho gayi</button>
+        <span class="src" id="src1"></span>
+        <label class="ctl" for="speed1">Raftar <input type="range" id="speed1" min="0.5" max="1.6" step="0.1" value="1"></label>
+      </div>
+      <div class="meta">
+        <div class="card"><h3>Hindi tarjuma</h3><p id="tarFull"></p><p class="note" id="ref1"></p>
+          <a class="qari" id="qari1" href="#" target="_blank" rel="noopener" hidden>▶ Qari ki tilawat sunein (Quran.com)</a></div>
+        <div class="card"><h3>Audio</h3>
+          <label class="ctl" for="voiceSel" style="flex-wrap:wrap">Arabic awaaz <select id="voiceSel" style="max-width:100%"></select></label>
+          <p class="note" id="voiceNote"></p>
+          <p class="note" style="margin-top:8px"><b>Is dua ki recording lagayein:</b></p>
+          <input class="file" type="file" id="aud1" accept="audio/*">
+          <p class="note" id="audName"></p>
+          <button class="btn" id="del1" hidden>Is dua ki recording hatayein</button>
+          <p class="note" id="shareNote"></p>
+          <p class="note" style="margin-top:8px"><b>Sab duaon ki audio ek saath:</b> files ke naam dua number se rakhein (01.mp3, 02.mp3 …).</p>
+          <input class="file" type="file" id="pack1" accept="audio/*" multiple>
+          <p class="note" id="packNote"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISPLAY -->
+<section id="display" hidden>
+  <div class="reader">
+    <div class="stage fs-stage" id="stage2">
+      <canvas class="pat"></canvas>
+      <div class="occ" id="occ2"></div>
+      <h2 class="title" id="title2"></h2>
+      <div class="words" id="words2"></div>
+      <p class="tarjuma" id="tar2"></p>
+    </div>
+    <div class="bar">
+      <button class="btn primary" id="play2">▶ Auto-chalayein</button>
+      <button class="btn" id="prev2">◀ Pichhli</button>
+      <button class="btn" id="next2">Agli ▶</button>
+      <button class="btn" id="fs2">⛶ Poori screen</button>
+      <button class="btn" id="speak2" aria-pressed="true">🔊 Awaaz</button>
+      <button class="btn" id="hindi2" aria-pressed="false">🗣 Tarjuma</button>
+      <label class="ctl" for="cat2">Qism <select id="cat2"></select></label>
+      <label class="ctl" for="rep2">Har dua <select id="rep2"><option>1</option><option selected>2</option><option>3</option></select> baar</label>
+    </div>
+    <p class="note">Class mein projector ya TV par lagayein. Har dua lafz-ba-lafz chalegi, phir agli dua apne aap aayegi.</p>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section id="video" hidden>
+  <div class="grid">
+    <div class="card">
+      <h3>Video chunein</h3>
+      <p class="note">Apni koi bhi video (masjid, qudrat, background) lagayein. Dua uske upar tarjume ke saath chalegi.</p>
+      <input class="file" type="file" id="vidIn" accept="video/*">
+      <p style="margin-top:12px"><label class="ctl" for="vidDua">Dua <select id="vidDua"></select></label></p>
+      <div class="bar" style="margin-top:10px"><button class="btn primary" id="vidPlay">▶ Chalayein</button><button class="btn" id="speak3" aria-pressed="true">🔊 Awaaz</button></div>
+    </div>
+    <div class="reader">
+      <div class="vbox">
+        <video id="vid" playsinline muted loop></video>
+        <div class="empty" id="vidEmpty">Video lagane ke baad yahan dua upar chalegi</div>
+        <div class="ov"><div class="words" id="words3"></div><p class="tarjuma" id="tar3"></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SABAK -->
+<section id="sabak" hidden>
+  <div class="lessons">
+    <div class="card"><h3>Islam ke 5 Arkan</h3><ol>
+      <li><b>Kalima (Shahadat)</b> — Allah ke siwa koi mabood nahin, Muhammad ﷺ Allah ke Rasool hain</li>
+      <li><b>Namaz</b> — din mein 5 waqt</li>
+      <li><b>Roza</b> — Ramzan ke mahine mein</li>
+      <li><b>Zakat</b> — maal par saal mein ek baar</li>
+      <li><b>Hajj</b> — taaqat ho to zindagi mein ek baar</li></ol></div>
+    <div class="card"><h3>Iman ki 6 baaten</h3><ol>
+      <li>Allah par iman</li><li>Farishton par</li><li>Aasmani kitabon par</li>
+      <li>Rasoolon par</li><li>Qayamat ke din par</li><li>Taqdeer (achchhi aur buri) par</li></ol></div>
+    <div class="card"><h3>Wuzu ke 4 Farz (Hanafi)</h3><ol>
+      <li>Poora chehra dhona</li><li>Dono haath kohniyon samet dhona</li>
+      <li>Chauthai sar ka masah karna</li><li>Dono paon takhnon samet dhona</li></ol>
+      <p class="note">Shuru mein Bismillah padhein; aakhir mein Kalima-e-Shahadat.</p></div>
+    <div class="card"><h3>5 Waqt ki Namaz</h3><ul>
+      <li><b>Fajr</b> — 2 farz</li><li><b>Zuhr</b> — 4 farz</li><li><b>Asr</b> — 4 farz</li>
+      <li><b>Maghrib</b> — 3 farz</li><li><b>Isha</b> — 4 farz (+ 3 witr)</li></ul>
+      <p class="note">Sunnat aur nafl alag hain; ustaad se tafseel seekhein.</p></div>
+  </div>
+  <p class="note" style="margin-top:14px">Masail ki tafseel apne maslak ke ulama se zaroor tasdeeq karein.</p>
+</section>
+</div>
+
+<script>
+// [id, category, name, occasion, arabic (space-separated words), hindi pronunciation (one token per arabic word, "_" = space), tarjuma, hawala, quran ayah for qari link]
+const RAW=[
+["kalima1","Kalime","Pehla Kalima (Tayyiba)","Iman ki buniyaad",
+"لَا إِلَٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ",
+"ला इलाहा इल्लल् लाहु मुहम्मदुर रसूलुल् लाह",
+"Allah ke siwa koi mabood nahin, Muhammad ﷺ Allah ke Rasool hain.","Kalima Tayyiba"],
+["kalima2","Kalime","Doosra Kalima (Shahadat)","Iman ki gawahi",
+"أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",
+"अश्हदु अल् ला इलाहा इल्लल् लाहु वहदहू ला शरीका लहू व_अश्हदु अन्ना मुहम्मदन अब्दुहू व_रसूलुह",
+"Main gawahi deta hoon ki Allah ke siwa koi mabood nahin, woh akela hai, uska koi shareek nahin; aur main gawahi deta hoon ki Muhammad ﷺ uske bande aur Rasool hain.","Sahih Muslim"],
+
+["bismillah","Rozana","Bismillah","Har kaam shuru karne se pehle",
+"بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+"बिस्मिल्लाहि र्रहमानि र्रहीम _",
+"Allah ke naam se jo bada meherbaan, nihayat reham wala hai.","Quran 1:1","1:1"],
+["sona","Rozana","Sone se pehle","Bistar par letne ke baad",
+"اللَّهُمَّ بِاسْمِكَ أَمُوتُ وَأَحْيَا",
+"अल्लाहुम्मा बिस्मिका अमूतु व_अह्या",
+"Aye Allah! Tere hi naam se main marta (sota) hoon aur jeeta (jaagta) hoon.","Sahih Bukhari"],
+["jagna","Rozana","Neend se jaagne par","Subah uthte hi",
+"الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
+"अल्हम्दु लिल्लाहिल लज़ी अह्याना बअ्दा मा अमातना व_इलैहिन नुशूर",
+"Sab tareef Allah ke liye hai jisne hamein maut (neend) ke baad zindagi di, aur usi ki taraf laut kar jaana hai.","Sahih Bukhari"],
+["ghar_nikal","Rozana","Ghar se nikalte waqt","Darwaze se bahar jaate hue",
+"بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+"बिस्मिल्लाहि _ तवक्कल्तु अलल्लाहि _ ला हौला वला क़ुव्वता इल्ला बिल्लाह",
+"Allah ke naam se, maine Allah par bharosa kiya. Allah ke baghair na koi taaqat hai na quwwat.","Sunan Abu Dawood, Tirmizi"],
+["ghar_dakhil","Rozana","Ghar mein daakhil hote waqt","Ghar aakar salaam se pehle",
+"بِسْمِ اللَّهِ وَلَجْنَا وَبِسْمِ اللَّهِ خَرَجْنَا وَعَلَى رَبِّنَا تَوَكَّلْنَا",
+"बिस्मिल्लाहि _ वलज्ना व_बिस्मिल्लाहि _ ख़रज्ना व_अला रब्बिना तवक्कल्ना",
+"Allah ke naam se hum daakhil hue, Allah ke naam se hum nikle, aur apne Rab par hi humne bharosa kiya.","Sunan Abu Dawood"],
+["toilet1","Rozana","Bait-ul-khala jaane se pehle","Andar jaane se pehle (baayan paon)",
+"اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبُثِ وَالْخَبَائِثِ",
+"अल्लाहुम्मा इन्नी अऊज़ु बिका मिनल ख़ुबुसि वल_ख़बाइस",
+"Aye Allah! Main tujh se napaak jinnon (nar aur maada) se panaah maangta hoon.","Sahih Bukhari, Muslim"],
+["toilet2","Rozana","Bait-ul-khala se nikalne par","Baahar aate hue (daayan paon)",
+"غُفْرَانَكَ",
+"ग़ुफ़रानक",
+"(Aye Allah!) Main teri maghfirat chahta hoon.","Sunan Abu Dawood, Tirmizi"],
+["kapde","Rozana","Kapde pehente waqt","Naya ya koi bhi libaas pehente hue",
+"الْحَمْدُ لِلَّهِ الَّذِي كَسَانِي هَٰذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
+"अल्हम्दु लिल्लाहिल लज़ी कसानी हाज़ा व_रज़क़नीहि मिन ग़ैरि हौलिम मिन्नी वला क़ुव्वह",
+"Sab tareef Allah ke liye jisne mujhe yeh pehnaya aur meri kisi taaqat aur quwwat ke baghair mujhe yeh ata kiya.","Sunan Abu Dawood, Tirmizi"],
+["aaina","Rozana","Aaina dekhte waqt","Shisha dekhne par",
+"اللَّهُمَّ أَنْتَ حَسَّنْتَ خَلْقِي فَحَسِّنْ خُلُقِي",
+"अल्लाहुम्मा अन्ता हस्सन्ता ख़ल्क़ी फ़_हस्सिन ख़ुलुक़ी",
+"Aye Allah! Tune meri soorat achchhi banayi, to mere akhlaaq bhi achchhe kar de.","Musnad Ahmad"],
+["sawari","Rozana","Sawari par baithte waqt","Gaadi, bus, train par",
+"سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَٰذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَىٰ رَبِّنَا لَمُنْقَلِبُونَ",
+"सुब्हानल लज़ी सख़्ख़रा लना हाज़ा वमा कुन्ना लहू मुक़रिनीन व_इन्ना इला रब्बिना ल_मुन्क़लिबून",
+"Paak hai woh zaat jisne is (sawari) ko hamare bas mein kar diya, warna hum ise qaabu mein nahin kar sakte the, aur beshak hum apne Rab ki taraf lautne wale hain.","Quran 43:13-14","43:13"],
+["chheenk","Rozana","Chheenk aane par","Chheenkne wala kahe; sunne wala 'Yarhamukallah' kahe",
+"الْحَمْدُ لِلَّهِ يَرْحَمُكَ اللَّهُ يَهْدِيكُمُ اللَّهُ وَيُصْلِحُ بَالَكُمْ",
+"अल्हम्दु लिल्लाह यरहमुकल्लाह _ यहदीकुमुल्लाहु _ व_युस्लिहु बालकुम",
+"Chheenkne wala: Sab tareef Allah ke liye. Sunne wala: Allah tum par reham kare. Chheenkne wala jawab de: Allah tumhe hidayat de aur tumhara haal durust kare.","Sahih Bukhari"],
+["shukriya","Rozana","Shukriya ada karna","Koi ehsaan kare to",
+"جَزَاكَ اللَّهُ خَيْرًا",
+"जज़ाकल्लाहु _ ख़ैरा",
+"Allah tumhe behtareen badla de.","Jami Tirmizi"],
+["chaand","Rozana","Naya chaand dekhne par","Har mahine ki pehli raat",
+"اللَّهُمَّ أَهِلَّهُ عَلَيْنَا بِالْأَمْنِ وَالْإِيمَانِ وَالسَّلَامَةِ وَالْإِسْلَامِ رَبِّي وَرَبُّكَ اللَّهُ",
+"अल्लाहुम्मा अहिल्लहू अलैना बिल_अम्नि वल_ईमानि वस्सलामति वल_इस्लाम रब्बी व_रब्बुकल्लाह _",
+"Aye Allah! Is chaand ko hum par aman, iman, salamati aur Islam ke saath nikaal. (Aye chaand!) Mera aur tera Rab Allah hai.","Jami Tirmizi"],
+["baarish","Rozana","Baarish hone par","Baarish shuru ho to",
+"اللَّهُمَّ صَيِّبًا نَافِعًا",
+"अल्लाहुम्मा सय्यिबन नाफ़िआ",
+"Aye Allah! Ise faayda dene wali baarish bana.","Sahih Bukhari"],
+["majlis","Rozana","Majlis khatam hone par","Baithak ya class ke aakhir mein",
+"سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا أَنْتَ أَسْتَغْفِرُكَ وَأَتُوبُ إِلَيْكَ",
+"सुब्हानका अल्लाहुम्मा व_बिहम्दिका अश्हदु अल् ला इलाहा इल्ला अन्ता अस्तग़फ़िरुका व_अतूबु इलैक",
+"Aye Allah! Tu paak hai apni tareef ke saath. Main gawahi deta hoon ki tere siwa koi mabood nahin. Main tujh se maafi maangta hoon aur teri taraf tauba karta hoon.","Jami Tirmizi, Abu Dawood"],
+["shaadi","Rozana","Dulha-dulhan ko mubarakbaad","Nikah ke mauqe par",
+"بَارَكَ اللَّهُ لَكَ وَبَارَكَ عَلَيْكَ وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ",
+"बारकल्लाहु _ लका व_बारका अलैका व_जमआ बैनकुमा फ़ी ख़ैर",
+"Allah tumhare liye barkat de, tum par barkat naazil kare aur tum dono ko bhalai mein jamaa rakhe.","Sunan Abu Dawood, Tirmizi"],
+
+["khana1","Khana-Peena","Khane se pehle","Khana shuru karte waqt",
+"بِسْمِ اللَّهِ وَعَلَىٰ بَرَكَةِ اللَّهِ",
+"बिस्मिल्लाहि _ व_अला बरकतिल्लाह _",
+"Allah ke naam se aur Allah ki barkat par (main khana shuru karta hoon).","Mashhoor masnoon dua"],
+["khana_bhool","Khana-Peena","Bismillah bhool jaaye to","Khane ke beech mein yaad aaye",
+"بِسْمِ اللَّهِ أَوَّلَهُ وَآخِرَهُ",
+"बिस्मिल्लाहि _ अव्वलहू व_आख़िरह",
+"Allah ke naam se, iske shuru mein bhi aur aakhir mein bhi.","Sunan Abu Dawood, Tirmizi"],
+["khana2","Khana-Peena","Khane ke baad","Khana khatam karne par",
+"الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ",
+"अल्हम्दु लिल्लाहिल लज़ी अत्अमना व_सक़ाना व_जअलना मुस्लिमीन",
+"Sab tareef Allah ke liye hai jisne hamein khilaya, pilaya aur Musalman banaya.","Sunan Abu Dawood, Tirmizi"],
+["doodh","Khana-Peena","Doodh peete waqt","Doodh peene ke baad",
+"اللَّهُمَّ بَارِكْ لَنَا فِيهِ وَزِدْنَا مِنْهُ",
+"अल्लाहुम्मा बारिक लना फ़ीहि व_ज़िदना मिन्ह",
+"Aye Allah! Hamare liye ismein barkat de aur hamein yeh aur zyada ata farma.","Jami Tirmizi"],
+["mezbaan","Khana-Peena","Mezbaan (khilane wale) ke liye","Dawat khane ke baad",
+"اللَّهُمَّ أَطْعِمْ مَنْ أَطْعَمَنِي وَاسْقِ مَنْ سَقَانِي",
+"अल्लाहुम्मा अत्इम मन अत्अमनी वस्क़ि मन सक़ानी",
+"Aye Allah! Jisne mujhe khilaya use tu khila, aur jisne mujhe pilaya use tu pila.","Sahih Muslim"],
+
+["masjid1","Namaz aur Ibadat","Masjid mein daakhil hote waqt","Daayan paon andar rakhte hue",
+"اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
+"अल्लाहुम्मफ़ तह ली अब्वाबा रहमतिक",
+"Aye Allah! Mere liye apni rehmat ke darwaze khol de.","Sahih Muslim"],
+["masjid2","Namaz aur Ibadat","Masjid se nikalte waqt","Baayan paon bahar rakhte hue",
+"اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ",
+"अल्लाहुम्मा इन्नी अस्अलुका मिन फ़ज़्लिक",
+"Aye Allah! Main tujh se tera fazl maangta hoon.","Sahih Muslim"],
+["wuzu","Namaz aur Ibadat","Wuzu ke baad","Wuzu mukammal karke",
+"أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ وَاجْعَلْنِي مِنَ الْمُتَطَهِّرِينَ",
+"अश्हदु अल् ला इलाहा इल्लल् लाहु वहदहू ला शरीका लहू व_अश्हदु अन्ना मुहम्मदन अब्दुहू व_रसूलुहू अल्लाहुम्मज अल्नी मिनत तव्वाबीना वज_अल्नी मिनल मु-त-तह्हिरीन",
+"Main gawahi deta hoon ki Allah ke siwa koi mabood nahin, woh akela hai, uska koi shareek nahin, aur Muhammad ﷺ uske bande aur Rasool hain. Aye Allah! Mujhe tauba karne walon aur paak rehne walon mein shamil kar.","Sahih Muslim, Jami Tirmizi"],
+["azaan","Namaz aur Ibadat","Azaan ke baad","Azaan khatam hone par",
+"اللَّهُمَّ رَبَّ هَٰذِهِ الدَّعْوَةِ التَّامَّةِ وَالصَّلَاةِ الْقَائِمَةِ آتِ مُحَمَّدًا الْوَسِيلَةَ وَالْفَضِيلَةَ وَابْعَثْهُ مَقَامًا مَحْمُودًا الَّذِي وَعَدْتَهُ",
+"अल्लाहुम्मा रब्बा हाज़िहिद दअ्वतित ताम्मति वस्सलातिल क़ाइमति आति मुहम्मदनिल वसीलता वल_फ़ज़ीलता वब्अस्हु मक़ामम महमूदनिल लज़ी वअत्तह",
+"Aye Allah! Is mukammal pukaar aur qaayam hone wali namaz ke Rab! Muhammad ﷺ ko waseela aur fazilat ata farma, aur unhe us maqam-e-mahmood par pahuncha jiska tune unse waada kiya hai.","Sahih Bukhari"],
+["sana","Namaz aur Ibadat","Sana","Namaz shuru karte hi (takbeer ke baad)",
+"سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَىٰ جَدُّكَ وَلَا إِلَٰهَ غَيْرُكَ",
+"सुब्हानका अल्लाहुम्मा व_बिहम्दिका व_तबारकस मुका व_तआला जद्दुका वला इलाहा ग़ैरुक",
+"Aye Allah! Tu paak hai, teri hi tareef hai, tera naam barkat wala hai, teri shaan buland hai, aur tere siwa koi mabood nahin.","Sunan Abu Dawood, Tirmizi"],
+["ruku","Namaz aur Ibadat","Ruku ki tasbeeh","Ruku mein (kam az kam 3 baar)",
+"سُبْحَانَ رَبِّيَ الْعَظِيمِ",
+"सुब्हाना रब्बियल अज़ीम",
+"Paak hai mera Rab jo azmat wala hai.","Sahih Muslim"],
+["qauma","Namaz aur Ibadat","Ruku se uthte waqt","Qauma mein",
+"سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ رَبَّنَا لَكَ الْحَمْدُ",
+"समिअल्लाहु _ लिमन हमिदह रब्बना लकल हम्द",
+"Allah ne us ki sun li jisne uski tareef ki. Aye hamare Rab! Sab tareef tere hi liye hai.","Sahih Bukhari"],
+["sajda","Namaz aur Ibadat","Sajde ki tasbeeh","Sajde mein (kam az kam 3 baar)",
+"سُبْحَانَ رَبِّيَ الْأَعْلَىٰ",
+"सुब्हाना रब्बियल अअ्ला",
+"Paak hai mera Rab jo sab se buland hai.","Sahih Muslim"],
+["durood","Namaz aur Ibadat","Durood-e-Ibrahimi","Qaada mein Attahiyyat ke baad",
+"اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ اللَّهُمَّ بَارِكْ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
+"अल्लाहुम्मा सल्लि अला मुहम्मदिंव व_अला आलि मुहम्मदिन कमा सल्लैता अला इब्राहीमा व_अला आलि इब्राहीमा इन्नका हमीदुम मजीद अल्लाहुम्मा बारिक अला मुहम्मदिंव व_अला आलि मुहम्मदिन कमा बारक्ता अला इब्राहीमा व_अला आलि इब्राहीमा इन्नका हमीदुम मजीद",
+"Aye Allah! Muhammad ﷺ aur aal-e-Muhammad par rehmat naazil farma jaise tune Ibrahim (alaihissalam) aur aal-e-Ibrahim par rehmat naazil farmayi; beshak tu tareef wala, buzurgi wala hai. Aye Allah! Muhammad ﷺ aur aal-e-Muhammad par barkat naazil farma jaise tune Ibrahim aur aal-e-Ibrahim par barkat naazil farmayi; beshak tu tareef wala, buzurgi wala hai.","Sahih Bukhari"],
+["masura","Namaz aur Ibadat","Dua-e-Masura","Durood ke baad, salaam se pehle",
+"اللَّهُمَّ إِنِّي ظَلَمْتُ نَفْسِي ظُلْمًا كَثِيرًا وَلَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ فَاغْفِرْ لِي مَغْفِرَةً مِنْ عِنْدِكَ وَارْحَمْنِي إِنَّكَ أَنْتَ الْغَفُورُ الرَّحِيمُ",
+"अल्लाहुम्मा इन्नी ज़लम्तु नफ़्सी ज़ुल्मन कसीरंव वला यग़फ़िरुज़ ज़ुनूबा इल्ला अन्ता फ़ग़फ़िर ली मग़फ़िरतम मिन इन्दिका वर्हम्नी इन्नका अन्तल ग़फ़ूरुर रहीम",
+"Aye Allah! Maine apni jaan par bahut zulm kiya, aur tere siwa koi gunaahon ko maaf nahin karta. To apni taraf se meri maghfirat farma aur mujh par reham kar; beshak tu bahut bakhshne wala, reham karne wala hai.","Sahih Bukhari, Muslim"],
+["namaz_baad","Namaz aur Ibadat","Farz namaz ke baad","Salaam pherne ke baad",
+"أَسْتَغْفِرُ اللَّهَ اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ",
+"अस्तग़फ़िरुल्लाह _ अल्लाहुम्मा अन्तस सलामु व_मिन्कस सलामु तबारक्ता या ज़ल जलालि वल_इकराम",
+"Main Allah se maafi maangta hoon (3 baar). Aye Allah! Tu salamati wala hai aur tujh hi se salamati hai; tu barkat wala hai, aye azmat aur izzat wale.","Sahih Muslim"],
+["iftar1","Namaz aur Ibadat","Roza kholne ki dua","Iftar ke waqt",
+"اللَّهُمَّ لَكَ صُمْتُ وَعَلَىٰ رِزْقِكَ أَفْطَرْتُ",
+"अल्लाहुम्मा लका सुम्तु व_अला रिज़्क़िका अफ़्तर्तु",
+"Aye Allah! Maine tere liye roza rakha aur tere hi rizq se iftar kiya.","Sunan Abu Dawood"],
+["iftar2","Namaz aur Ibadat","Iftar ke baad","Roza kholne ke baad",
+"ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ وَثَبَتَ الْأَجْرُ إِنْ شَاءَ اللَّهُ",
+"ज़हबज़ ज़मउ वब्तल्लतिल उरूक़ु व_सबतल अज्रु इन शाअल् लाह",
+"Pyaas chali gayi, ragen tar ho gayin, aur Allah ne chaha to ajr saabit ho gaya.","Sunan Abu Dawood"],
+["qadr","Namaz aur Ibadat","Shab-e-Qadr ki dua","Ramzan ki aakhri raaton mein",
+"اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي",
+"अल्लाहुम्मा इन्नका अफ़ुव्वुन तुहिब्बुल अफ़्वा फ़अ्फ़ु अन्नी",
+"Aye Allah! Tu bahut maaf karne wala hai, maafi ko pasand karta hai, to mujhe maaf kar de.","Jami Tirmizi"],
+["istighfar","Namaz aur Ibadat","Sayyid-ul-Istighfar","Subah aur shaam",
+"اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَىٰ عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
+"अल्लाहुम्मा अन्ता रब्बी ला इलाहा इल्ला अन्ता ख़लक़्तनी व_अना अब्दुका व_अना अला अह्दिका व_वअ्दिका मस् ततअ्तु अऊज़ु बिका मिन शर्रि मा सनअ्तु अबूउ लका बि_निअ्मतिका अलय्या व_अबूउ बि_ज़म्बी फ़ग़फ़िर ली फ़_इन्नहू ला यग़फ़िरुज़ ज़ुनूबा इल्ला अन्त",
+"Aye Allah! Tu mera Rab hai, tere siwa koi mabood nahin. Tune mujhe paida kiya aur main tera banda hoon, aur jitna ho sake tere ahd aur waade par qaayam hoon. Main apne kiye ki buraai se teri panaah maangta hoon. Mujh par teri nemat ka iqraar karta hoon aur apne gunaah ka bhi iqraar karta hoon, to mujhe maaf kar de, kyunki tere siwa koi gunaah maaf nahin karta.","Sahih Bukhari"],
+
+["zidni","Quran ki Duaen","Ilm badhne ki dua","Padhai se pehle",
+"رَبِّ زِدْنِي عِلْمًا",
+"रब्बि ज़िदनी इल्मा",
+"Aye mere Rab! Mere ilm mein izafa farma.","Quran 20:114","20:114"],
+["sharh","Quran ki Duaen","Rabbish-rah li sadri","Sabak ya taqreer se pehle",
+"رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي وَاحْلُلْ عُقْدَةً مِنْ لِسَانِي يَفْقَهُوا قَوْلِي",
+"रब्बिश रह ली सदरी व_यस्सिर ली अम्री वह्लुल उक़्दतम मिल लिसानी यफ़क़हू क़ौली",
+"Aye mere Rab! Mera seena khol de, mera kaam aasaan kar de, aur meri zubaan ki girah khol de taaki log meri baat samjhein.","Quran 20:25-28","20:25"],
+["walidain","Quran ki Duaen","Walidain ke liye","Har namaz ke baad",
+"رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا",
+"रब्बिर हम्हुमा कमा रब्बयानी सग़ीरा",
+"Aye mere Rab! In dono par reham farma jaise inhone bachpan mein meri parwarish ki.","Quran 17:24","17:24"],
+["atina","Quran ki Duaen","Rabbana Aatina","Duniya aur aakhirat ki bhalai",
+"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+"रब्बना आतिना फ़िद दुनिया हसनतंव व_फ़िल आख़िरति हसनतंव व_क़िना अज़ाबन नार",
+"Aye hamare Rab! Hamein duniya mein bhi bhalai de aur aakhirat mein bhi bhalai de, aur hamein dozakh ke azaab se bacha.","Quran 2:201","2:201"],
+["zalamna","Quran ki Duaen","Hazrat Adam (as) ki dua","Gunaah ki maafi ke liye",
+"رَبَّنَا ظَلَمْنَا أَنْفُسَنَا وَإِنْ لَمْ تَغْفِرْ لَنَا وَتَرْحَمْنَا لَنَكُونَنَّ مِنَ الْخَاسِرِينَ",
+"रब्बना ज़लम्ना अन्फ़ुसना व_इल लम तग़फ़िर लना व_तर्हम्ना ल_नकूनन्ना मिनल ख़ासिरीन",
+"Aye hamare Rab! Humne apni jaanon par zulm kiya, aur agar tu hamein maaf na kare aur hum par reham na kare to hum zaroor nuqsaan uthane walon mein se ho jayenge.","Quran 7:23","7:23"],
+["yunus","Quran ki Duaen","Hazrat Yunus (as) ki dua","Musibat aur pareshani mein",
+"لَا إِلَٰهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ",
+"ला इलाहा इल्ला अन्ता सुब्हानका इन्नी कुन्तु मिनज़ ज़ालिमीन",
+"Tere siwa koi mabood nahin, tu paak hai; beshak main hi zulm karne walon mein se tha.","Quran 21:87","21:87"],
+["tuzigh","Quran ki Duaen","Iman par qaayam rehne ki dua","Dil ki mazbooti ke liye",
+"رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِنْ لَدُنْكَ رَحْمَةً إِنَّكَ أَنْتَ الْوَهَّابُ",
+"रब्बना ला तुज़िग़ क़ुलूबना बअ्दा इज़ हदैतना व_हब लना मिल लदुन्का रहमह इन्नका अन्तल वह्हाब",
+"Aye hamare Rab! Hamein hidayat dene ke baad hamare dilon ko tedha na kar, aur hamein apne paas se rehmat ata farma; beshak tu hi sab kuchh dene wala hai.","Quran 3:8","3:8"],
+["aulad","Quran ki Duaen","Ghar waalon aur aulad ke liye","Khandaan ki bhalai ke liye",
+"رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ وَاجْعَلْنَا لِلْمُتَّقِينَ إِمَامًا",
+"रब्बना हब लना मिन अज़्वाजिना व_ज़ुर्रिय्यातिना क़ुर्रता अअ्युनिंव वज्_अल्ना लिल_मुत्तक़ीना इमामा",
+"Aye hamare Rab! Hamein hamari biwiyon aur aulad se aankhon ki thandak ata farma, aur hamein parhezgaaron ka peshwa bana.","Quran 25:74","25:74"],
+["muqim","Quran ki Duaen","Namaz qaayam karne ki dua","Apne aur aulad ke liye",
+"رَبِّ اجْعَلْنِي مُقِيمَ الصَّلَاةِ وَمِنْ ذُرِّيَّتِي رَبَّنَا وَتَقَبَّلْ دُعَاءِ",
+"रब्बिज अल्नी मुक़ीमस सलाति व_मिन ज़ुर्रिय्यती रब्बना व_तक़ब्बल दुआ",
+"Aye mere Rab! Mujhe aur meri aulad mein se (logon ko) namaz qaayam karne wala bana; aye hamare Rab! Meri dua qubool farma.","Quran 14:40","14:40"],
+["taqabbal","Quran ki Duaen","Amal qubool hone ki dua","Har neik kaam ke baad",
+"رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنْتَ السَّمِيعُ الْعَلِيمُ",
+"रब्बना तक़ब्बल मिन्ना इन्नका अन्तस समीउल अलीम",
+"Aye hamare Rab! Hum se qubool farma; beshak tu hi sab kuchh sunne wala, jaanne wala hai.","Quran 2:127","2:127"],
+["ighfir","Quran ki Duaen","Maghfirat aur rehmat ki dua","Kisi bhi waqt",
+"رَبِّ اغْفِرْ وَارْحَمْ وَأَنْتَ خَيْرُ الرَّاحِمِينَ",
+"रब्बिग़ फ़िर वर्हम व_अन्ता ख़ैरुर राहिमीन",
+"Aye mere Rab! Maaf farma aur reham farma, aur tu sab se behtar reham karne wala hai.","Quran 23:118","23:118"],
+
+["hifazat1","Hifazat aur Pareshani","Subah-shaam hifazat ki dua","Subah aur shaam 3 baar",
+"بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
+"बिस्मिल्लाहिल _ लज़ी ला यज़ुर्रु मअस मिही शैउन फ़िल अर्ज़ि वला फ़िस समाइ व_हुवस समीउल अलीम",
+"Allah ke naam se jiske naam ke saath zameen aur aasmaan mein koi cheez nuqsaan nahin pahuncha sakti, aur woh sab kuchh sunne wala, jaanne wala hai.","Sunan Abu Dawood, Tirmizi"],
+["hifazat2","Hifazat aur Pareshani","Har buraai se panaah","Shaam ko aur naye maqaam par 3 baar",
+"أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+"अऊज़ु बि_कलिमातिल् लाहित ताम्माति मिन शर्रि मा ख़लक़",
+"Main Allah ke mukammal kalimaat ki panaah maangta hoon har us cheez ki buraai se jo usne paida ki.","Sahih Muslim"],
+["gham","Hifazat aur Pareshani","Fikr aur gham se panaah","Pareshani, qarz ya kamzori mein",
+"اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ وَالْعَجْزِ وَالْكَسَلِ وَالْبُخْلِ وَالْجُبْنِ وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ",
+"अल्लाहुम्मा इन्नी अऊज़ु बिका मिनल हम्मि वल_हज़नि वल_अज्ज़ि वल_कसलि वल_बुख़्लि वल_जुब्नि व_ज़लइद दैनि व_ग़लबतिर रिजाल",
+"Aye Allah! Main teri panaah maangta hoon fikr aur gham se, majboori aur susti se, kanjoosi aur buzdili se, qarz ke bojh se aur logon ke ghalbe se.","Sahih Bukhari"],
+["hayyu","Hifazat aur Pareshani","Ya Hayyu Ya Qayyum","Musibat ke waqt",
+"يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ",
+"या हय्यु या क़य्यूमु बि_रहमतिका अस्तग़ीस",
+"Aye hamesha zinda rehne wale, aye sab ko thaamne wale! Main teri rehmat ke zariye madad maangta hoon.","Jami Tirmizi"],
+["hasbuna","Hifazat aur Pareshani","Hasbunallah","Dar ya khatre ke waqt",
+"حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
+"हस्बुनल्लाहु _ व_निअ्मल वकील",
+"Hamare liye Allah kaafi hai aur woh behtareen kaarsaaz hai.","Quran 3:173","3:173"],
+["inna_lillah","Hifazat aur Pareshani","Musibat ki khabar par","Koi nuqsaan ya maut ki khabar",
+"إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ",
+"इन्ना लिल्लाहि व_इन्ना इलैहि राजिऊन",
+"Beshak hum Allah hi ke hain aur beshak hum usi ki taraf lautne wale hain.","Quran 2:156","2:156"],
+["gussa","Hifazat aur Pareshani","Gussa aane par","Jab gussa aaye",
+"أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
+"अऊज़ु बिल्लाहि मिनश शैतानिर रजीम",
+"Main shaitan mardood se Allah ki panaah maangta hoon.","Sahih Bukhari"],
+["bimar","Hifazat aur Pareshani","Bimar ki iyadat par","Mareez se milte waqt",
+"لَا بَأْسَ طَهُورٌ إِنْ شَاءَ اللَّهُ",
+"ला बअ्सा तहूरुन इन शाअल्लाह _",
+"Koi fikr ki baat nahin, Allah ne chaha to yeh (bimari gunaahon se) paak karne wali hai.","Sahih Bukhari"]
+];
+
+const DUAS=RAW.map((r,n)=>{const a=r[4].split(" "),h=r[5].split(" ");
+  return{n:n+1,id:r[0],cat:r[1],name:r[2],occ:r[3],w:a.map((x,i)=>[x,h[i]==="_"?"":h[i].replace(/_/g," ")]),t:r[6],ref:r[7],q:r[8]||""}});
+const CATS=[...new Set(DUAS.map(d=>d.cat))];
+
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let learned=store.get("nm_learned",[]);
+let cur=0, audios={};
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $=id=>document.getElementById(id);
+
+/* ---------- animated star pattern ---------- */
+function startPattern(cv){
+  const ctx=cv.getContext("2d");let t=0;
+  function draw(){
+    const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;
+    if(cv.width!==Math.round(r.width*dpr)){cv.width=r.width*dpr;cv.height=r.height*dpr}
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,r.width,r.height);
+    ctx.strokeStyle="#e3b04b";ctx.lineWidth=1;
+    const s=70;
+    for(let y=-s;y<r.height+s;y+=s)for(let x=-s;x<r.width+s;x+=s){
+      ctx.save();ctx.translate(x+(y/s%2?s/2:0),y);ctx.rotate(t+(x+y)*.004);
+      for(let k=0;k<2;k++){ctx.rotate(Math.PI/4);ctx.strokeRect(-14,-14,28,28)}
+      ctx.restore();
+    }
+    t+=.003;if(!reduce)requestAnimationFrame(draw);else setTimeout(draw,1000);
+  }
+  draw();
+}
+document.querySelectorAll("canvas.pat").forEach(startPattern);
+
+/* ---------- rendering ---------- */
+function renderWords(el,d){
+  el.innerHTML="";
+  d.w.forEach((p,i)=>{const s=document.createElement("span");s.className="w";s.dataset.i=i;
+    s.innerHTML=`<span class="a">${p[0]}</span><span class="tr">${p[1]||"&nbsp;"}</span>`;el.appendChild(s)});
+}
+function setActive(el,i){[...el.children].forEach((c,k)=>{c.classList.toggle("on",k===i);c.classList.toggle("past",k<i)})}
+function wordDur(d,speed){return d.w.map(p=>(450+p[0].length*95)/speed)}
+
+/* ---------- device voices ---------- */
+let VOICES=[];
+function loadVoices(){try{VOICES=speechSynthesis.getVoices()||[]}catch(e){VOICES=[]}try{fillVoiceSel()}catch(e){}updateVoiceNote()}
+try{loadVoices();speechSynthesis.onvoiceschanged=loadVoices}catch(e){}
+/* cleanest Arabic voice first: natural/neural/online engines, then Google, then the rest */
+function arVoices(){const sc=v=>(/natural|neural|online|enhanced|premium/i.test(v.name)?4:0)+(/google/i.test(v.name)?2:0)+(/microsoft|apple|siri/i.test(v.name)?1:0)+(/^ar[-_]SA/i.test(v.lang)?1:0);
+  return VOICES.filter(v=>/^ar/i.test(v.lang)).sort((a,b)=>sc(b)-sc(a))}
+const arV=()=>{const L=arVoices();let pick=null;try{pick=localStorage.getItem("nm_voice")}catch(e){}return L.find(v=>v.voiceURI===pick)||L[0]};
+const HARAKAT=/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g;
+/* speak the whole dua in one natural flow; highlight follows the voice (word boundaries) or a timed estimate */
+function sayFlow(d,voice,rate,onWord){return new Promise(res=>{
+  const words=d.w.map(p=>p[0]),text=words.join(" "),starts=[];let pos=0;words.forEach(w=>{starts.push(pos);pos+=w.length+1});
+  const lens=words.map(w=>w.replace(HARAKAT,"").length+1),tot=lens.reduce((a,b)=>a+b,0);
+  const est=tot/(10.5*rate)*1000;let timers=[],gotBoundary=false,done=false;
+  const fin=()=>{if(done)return;done=true;timers.forEach(clearTimeout);res()};
+  try{const u=new SpeechSynthesisUtterance(text);u.lang=voice.lang||"ar-SA";u.voice=voice;u.rate=rate;
+    u.onstart=()=>{onWord(0);let acc=0;lens.forEach((l,i)=>{const t=acc/tot*est;acc+=l;if(i)timers.push(setTimeout(()=>{if(!gotBoundary)onWord(i)},t))})};
+    u.onboundary=e=>{if(e.name&&e.name!=="word")return;gotBoundary=true;let i=0;while(i+1<starts.length&&starts[i+1]<=e.charIndex)i++;onWord(i)};
+    u.onend=fin;u.onerror=fin;timers.push(setTimeout(fin,est*3+4000));speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){fin()}})}
+function fillVoiceSel(){const s=$("voiceSel");if(!s)return;const L=arVoices(),cur=arV();
+  s.innerHTML=L.length?L.map(v=>`<option value="${v.voiceURI.replace(/"/g,"&quot;")}"${cur&&v.voiceURI===cur.voiceURI?" selected":""}>${v.name} (${v.lang})</option>`).join(""):'<option>Koi Arabic awaaz nahin mili</option>';
+  s.disabled=!L.length}
+const hiV=()=>VOICES.find(v=>/^hi/i.test(v.lang))||VOICES.find(v=>/^ur/i.test(v.lang));
+function say(text,lang,voice,rate){return new Promise(res=>{
+  try{const u=new SpeechSynthesisUtterance(text);u.lang=lang;if(voice)u.voice=voice;u.rate=rate;
+    let done=false;const fin=()=>{if(!done){done=true;clearTimeout(g);res()}};
+    const g=setTimeout(fin,Math.max(2500,text.length*260/rate));
+    u.onend=fin;u.onerror=fin;speechSynthesis.speak(u)}catch(e){res()}})}
+function updateVoiceNote(){const el=$("voiceNote");if(!el)return;
+  try{updateSrc()}catch(e){}el.textContent=arV()?"Sabse saaf Arabic awaaz apne aap chuni gayi hai. Neeche se badal bhi sakte hain; naam mein 'Natural' ya 'Online' wali awaaz sabse saaf hoti hai.":"Is device mein Arabic awaaz nahin hai. Android: Settings → Text-to-speech → Google speech engine → Install voice data → Arabic. Windows: Microsoft Edge mein app kholein (Natural Arabic awaaz milti hai).";}
+
+/* Player: highlights words by timer, by device voice (word by word), or by an <audio> file */
+function Player(el,onEnd){
+  let token=0,stopFn=null;
+  const api={
+    async play(d,opt){api.stop();const my=++token;opt=opt||{};const speed=opt.speed||1;
+      if(opt.audio){const audio=opt.audio;
+        const durs=wordDur(d,1),tot=durs.reduce((a,b)=>a+b,0),cum=[];let acc=0;durs.forEach((x,i)=>{acc+=x;cum[i]=acc});
+        const tick=()=>{if(!audio.duration)return;const f=audio.currentTime/audio.duration*tot;let i=cum.findIndex(c=>f<c);if(i<0)i=d.w.length-1;setActive(el,i)};
+        const end=()=>{cleanup();setActive(el,d.w.length);stopFn=null;onEnd&&onEnd()};
+        const cleanup=()=>{audio.removeEventListener("timeupdate",tick);audio.removeEventListener("ended",end)};
+        audio.addEventListener("timeupdate",tick);audio.addEventListener("ended",end);
+        audio.currentTime=0;audio.play().catch(()=>{});stopFn=()=>{cleanup();audio.pause()};return}
+      const av=opt.voice&&arV();
+      if(av)await sayFlow(d,av,Math.max(.5,Math.min(1.3,speed*.85)),i=>{if(my===token)setActive(el,i)});
+      else{const durs=wordDur(d,speed);
+        for(let i=0;i<d.w.length;i++){if(my!==token)return;setActive(el,i);await new Promise(r=>setTimeout(r,durs[i]))}}
+      if(my!==token)return;setActive(el,d.w.length);
+      if(opt.voice&&opt.hindi&&hiV())await say(d.t,"hi-IN",hiV(),Math.min(1.1,speed));
+      await new Promise(r=>setTimeout(r,600));
+      if(my!==token)return;token++;onEnd&&onEnd();
+    },
+    stop(){token++;try{speechSynthesis.cancel()}catch(e){}stopFn&&stopFn();stopFn=null;setActive(el,-1)}
+  };
+  return api;
+}
+function audioFor(d){return audios[d.id]?audios[d.id].el:null}
+function srcLabel(d,voiceOn){
+  if(audios[d.id])return "♪ Recording: "+audios[d.id].name;
+  if(shared[d.id])return "♪ Recording (load ho rahi hai…)";
+  if(voiceOn&&arV())return "🔊 Arabic awaaz: "+arV().name;
+  return "Awaaz uplabdh nahin: sirf alfaaz chalenge";
+}
+
+/* ---------- shared recordings: stored once with the app, heard by every viewer ---------- */
+let DB=null,ASSETS=null,shared={};
+function b64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]||"");r.onerror=rej;r.readAsDataURL(file)})}
+/* recordings kept on this device (IndexedDB) and recordings bundled inside the mobile app (audio/01.mp3 …) */
+const LOCAL={db:null},tried=new Set();
+function idbOpen(){return new Promise(res=>{try{const r=indexedDB.open("noor-maktab",1);r.onupgradeneeded=()=>r.result.createObjectStore("rec");r.onsuccess=()=>res(r.result);r.onerror=()=>res(null)}catch(e){res(null)}})}
+async function idbDo(mode,fn){const db=LOCAL.db||(LOCAL.db=await idbOpen());if(!db)return null;
+  return new Promise(res=>{try{const tx=db.transaction("rec",mode),rq=fn(tx.objectStore("rec"));tx.oncomplete=()=>res(rq?rq.result:true);tx.onerror=()=>res(null)}catch(e){res(null)}})}
+async function loadLocalAll(){const all=await idbDo("readonly",s=>s.getAll());(all||[]).forEach(r=>{if(r&&r.blob&&!audios[r.id])audios[r.id]={el:new Audio(URL.createObjectURL(r.blob)),name:r.name,local:true}});renderList();updateSrc();show(true)}
+async function loadBundled(d){if(audios[d.id]||tried.has(d.id))return;tried.add(d.id);const nm=String(d.n).padStart(2,"0");
+  for(const ext of ["mp3","m4a","ogg"]){try{const r=await fetch(`audio/${nm}.${ext}`);if(r.ok){const b=await r.blob();if(b.size<1000)continue;
+    audios[d.id]={el:new Audio(URL.createObjectURL(b)),name:`App ki recording (${nm}.${ext})`,bundled:true};if(DUAS[cur].id===d.id)show(true);return}}catch(e){}}}
+async function loadShared(d){const m=shared[d.id];if(audios[d.id])return;if(!m){if(!DB)await loadBundled(d);return}
+  try{const txt=await (await fetch("/_blob/"+m.asset)).text();const bin=atob(txt.trim()),u=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+    audios[d.id]={el:new Audio(URL.createObjectURL(new Blob([u],{type:m.type||"audio/mpeg"}))),name:m.name,shared:true};
+    if(DUAS[cur].id===d.id)show();}catch(e){}}
+async function saveShared(d,f){
+  if(!DB||!ASSETS){const ok=await idbDo("readwrite",s=>s.put({id:d.id,name:f.name,blob:f},d.id));return ok?"local":false}
+  try{const up=await ASSETS.upload(new Blob([await b64(f)],{type:"text/plain"}));
+    await DB.doc("audio/"+d.id).set({asset:up.id,name:f.name,type:f.type||"audio/mpeg",n:d.n});return "shared"}
+  catch(e){$("packNote").textContent="Recording save nahin hui ("+(e&&e.code||"error")+"). Is device par chalegi.";return false}}
+(async()=>{
+  try{DB=await claude.use("db");ASSETS=await claude.use("assets")}catch(e){}
+  $("shareNote").textContent=ASSETS?"Aap jo recording lagayenge woh app mein save ho jayegi; har student ko apne aap sunai degi.":"Aap jo recording lagayenge woh is device mein save rahegi aur agli baar bhi chalegi.";
+  if(!DB){await loadLocalAll();return}
+  DB.collection("audio").onSnapshot(q=>{shared={};q.docs.forEach(x=>{const v=x.data();if(v&&v.asset)shared[x.id]=v});
+    Object.keys(audios).forEach(k=>{if(audios[k].shared&&!shared[k])delete audios[k]});
+    loadShared(DUAS[cur]);renderList();updateSrc();},()=>{});
+})();
+
+/* ---------- Duaen tab ---------- */
+const words1=$("words1");
+let playing1=false;
+const setPlay1=on=>{playing1=on;$("play1").textContent=on?"■ Rokein":"🔊 Audio ke saath chalayein"};
+const p1=Player(words1,()=>{if(playing1&&pressed("cont1")){cur=(cur+1)%DUAS.length;show(true);setPlay1(true);setTimeout(()=>playing1&&p1.play(DUAS[cur],opts1()),400)}else setPlay1(false)});
+function updateSrc(){$("src1").textContent=srcLabel(DUAS[cur],pressed("speak1"))}
+const pressed=id=>$(id).getAttribute("aria-pressed")==="true";
+const togglePress=id=>{const b=$(id);b.setAttribute("aria-pressed",!pressed(id));return pressed(id)};
+
+$("cat1").innerHTML='<option value="">Sab ('+DUAS.length+')</option>'+CATS.map(c=>`<option>${c}</option>`).join("");
+function renderList(){
+  const L=$("list");L.innerHTML="";let last="";
+  const q=$("q1").value.trim().toLowerCase(),cf=$("cat1").value;
+  const vis=DUAS.filter(d=>(!cf||d.cat===cf)&&(!q||(d.name+" "+d.occ+" "+d.t+" "+d.n).toLowerCase().includes(q)));
+  vis.forEach(d=>{
+    if(d.cat!==last){last=d.cat;const c=document.createElement("div");c.className="cat";c.textContent=d.cat;L.appendChild(c)}
+    const i=DUAS.indexOf(d),b=document.createElement("button");b.className="item";b.setAttribute("aria-current",i===cur);
+    b.innerHTML=`<span><span class="num">${d.n}</span> ${d.name} ${learned.includes(d.id)?'<span class="done">✓</span>':''}${(audios[d.id]||shared[d.id])?' <span class="has">♪</span>':''}</span><span class="ar">${d.w[0][0]}</span>`;
+    b.onclick=()=>{cur=i;show()};L.appendChild(b)});
+  if(!vis.length)L.innerHTML='<p class="note">Koi dua nahin mili. Doosra lafz likh kar dekhein.</p>';
+  $("progN").textContent=learned.length;$("progT").textContent=DUAS.length;
+}
+$("q1").oninput=renderList;$("cat1").onchange=renderList;
+function show(keep){
+  if(!keep){p1.stop();setPlay1(false)}
+  loadShared(DUAS[cur]);
+  const d=DUAS[cur];
+  $("occ1").textContent=d.occ;$("title1").textContent=d.n+". "+d.name;$("tar1").textContent=d.t;
+  $("tarFull").textContent=d.t;$("ref1").textContent="Hawala: "+d.ref;
+  const qa=$("qari1");if(d.q){const [s,a]=d.q.split(":");qa.href=`https://quran.com/${s}/${a}`;qa.hidden=false}else qa.hidden=true;
+  renderWords(words1,d);
+  words1.querySelectorAll(".w").forEach(w=>w.onclick=()=>{p1.stop();setPlay1(false);const i=+w.dataset.i;setActive(words1,i);
+    if(pressed("speak1")&&arV()){try{speechSynthesis.cancel()}catch(e){}say(d.w[i][0],"ar-SA",arV(),.7)}});
+  $("mark1").textContent=learned.includes(d.id)?"↺ Dobara seekhein":"✓ Yaad ho gayi";
+  $("audName").textContent=audios[d.id]?"Is dua ki audio: "+audios[d.id].name:"";
+  $("aud1").value="";$("del1").hidden=!((ASSETS&&shared[d.id])||(audios[d.id]&&audios[d.id].local));
+  renderList();updateSrc();
+}
+const opts1=()=>({speed:+$("speed1").value,voice:pressed("speak1"),hindi:pressed("hindi1"),audio:audioFor(DUAS[cur])});
+$("play1").onclick=async()=>{if(playing1){p1.stop();setPlay1(false);return}setPlay1(true);await loadShared(DUAS[cur]);if(playing1)p1.play(DUAS[cur],opts1())};
+$("speak1").onclick=()=>{togglePress("speak1");updateSrc()};
+$("voiceSel").onchange=e=>{try{localStorage.setItem("nm_voice",e.target.value)}catch(_){}p1.stop();setPlay1(false);updateSrc()};
+$("cont1").onclick=()=>togglePress("cont1");
+$("del1").onclick=async()=>{const d=DUAS[cur],m=shared[d.id];
+  if(audios[d.id]&&audios[d.id].local){await idbDo("readwrite",s=>s.delete(d.id));URL.revokeObjectURL(audios[d.id].el.src);delete audios[d.id];show();return}
+  if(!m||!DB)return;
+  try{await DB.doc("audio/"+d.id).delete();ASSETS&&ASSETS.delete(m.asset).catch(()=>{})}catch(e){}
+  if(audios[d.id])URL.revokeObjectURL(audios[d.id].el.src);delete audios[d.id];show()};
+$("hindi1").onclick=()=>togglePress("hindi1");
+$("hide1").onclick=()=>words1.classList.toggle("hide-ar",togglePress("hide1"));
+$("mark1").onclick=()=>{const id=DUAS[cur].id;learned=learned.includes(id)?learned.filter(x=>x!==id):[...learned,id];store.set("nm_learned",learned);show()};
+$("prev1").onclick=()=>{cur=(cur-1+DUAS.length)%DUAS.length;show()};
+$("next1").onclick=()=>{cur=(cur+1)%DUAS.length;show()};
+function attach(d,f){if(audios[d.id])URL.revokeObjectURL(audios[d.id].el.src);audios[d.id]={el:new Audio(URL.createObjectURL(f)),name:f.name}}
+$("aud1").onchange=async e=>{const f=e.target.files[0];if(!f)return;const d=DUAS[cur];attach(d,f);show();
+  $("audName").textContent="Save ho rahi hai…";const r=await saveShared(d,f);if(r){audios[d.id][r]=true;show();$("audName").textContent="Save ho gayi: "+f.name}else show()};
+/* audio pack: many files at once, matched by number at the start of the name (e.g. 07.mp3) or by dua id */
+$("pack1").onchange=async e=>{let ok=0,miss=[],matched=[];
+  [...e.target.files].forEach(f=>{const base=f.name.replace(/\.[^.]+$/,"").toLowerCase();
+    const m=base.match(/^\s*0*(\d{1,3})/);let d=m?DUAS[+m[1]-1]:null;if(!d)d=DUAS.find(x=>base.includes(x.id));
+    if(d){attach(d,f);ok++;matched.push([d,f])}else miss.push(f.name)});
+  $("packNote").textContent=`${ok} audio file duaon se jud gayin.`+(miss.length?` In ka number nahin mila: ${miss.slice(0,4).join(", ")}${miss.length>4?"…":""}`:"");
+  e.target.value="";show();
+  if(matched.length){let k=0;for(const [d,f] of matched){$("packNote").textContent=`Save ho rahi hain: ${++k}/${matched.length}`;const r=await saveShared(d,f);if(r)audios[d.id][r]=true}
+    $("packNote").textContent=`${k} recordings app mein save ho gayin.`}};
+
+/* ---------- Display tab ---------- */
+let di=0,rep=0,auto=false;
+const words2=$("words2");
+const p2=Player(words2,()=>{if(!auto)return;rep++;
+  if(rep>=+$("rep2").value){rep=0;di=(di+1)%DUAS.length;showD()}
+  setTimeout(()=>auto&&run2(),reduce?400:1200)});
+$("cat2").innerHTML='<option value="">Sab duaen</option>'+CATS.map(c=>`<option>${c}</option>`).join("");
+function showD(){const d=DUAS[di];$("occ2").textContent=d.occ;$("title2").textContent=d.n+". "+d.name;$("tar2").textContent=d.t;renderWords(words2,d)}
+async function run2(){const cf=$("cat2").value;if(cf&&DUAS[di].cat!==cf){di=DUAS.findIndex((d,i)=>i>=di&&d.cat===cf);if(di<0)di=DUAS.findIndex(d=>d.cat===cf);showD()}
+  const d=DUAS[di];await loadShared(d);p2.play(d,{speed:1,voice:pressed("speak2"),hindi:pressed("hindi2"),audio:audioFor(d)})}
+$("speak2").onclick=()=>togglePress("speak2");$("hindi2").onclick=()=>togglePress("hindi2");
+$("cat2").onchange=()=>{const cf=$("cat2").value;if(cf){di=DUAS.findIndex(d=>d.cat===cf);rep=0;p2.stop();showD();if(auto)run2()}};
+$("play2").onclick=()=>{auto=!auto;$("play2").textContent=auto?"■ Rokein":"▶ Auto-chalayein";if(auto){rep=0;run2()}else p2.stop()};
+$("next2").onclick=()=>{p2.stop();di=(di+1)%DUAS.length;rep=0;showD();if(auto)run2()};
+$("prev2").onclick=()=>{p2.stop();di=(di-1+DUAS.length)%DUAS.length;rep=0;showD();if(auto)run2()};
+$("fs2").onclick=()=>{const s=$("stage2");try{const r=(s.requestFullscreen||s.webkitRequestFullscreen).call(s);r&&r.catch&&r.catch(()=>{})}catch(e){}};
+
+/* ---------- Video tab ---------- */
+const words3=$("words3"),vid=$("vid");let vOn=false;
+const runV=async()=>{const d=DUAS[+$("vidDua").value];await loadShared(d);p3.play(d,{speed:.9,voice:pressed("speak3"),audio:audioFor(d)})};
+const p3=Player(words3,()=>{if(vOn)setTimeout(()=>vOn&&runV(),1500)});
+$("vidDua").innerHTML=DUAS.map((d,i)=>`<option value="${i}">${d.n}. ${d.name}</option>`).join("");
+function showV(){const d=DUAS[+$("vidDua").value];renderWords(words3,d);$("tar3").textContent=d.t}
+$("speak3").onclick=()=>togglePress("speak3");
+$("vidDua").onchange=()=>{p3.stop();showV();if(vOn)runV()};
+$("vidIn").onchange=e=>{const f=e.target.files[0];if(!f)return;if(vid.src)URL.revokeObjectURL(vid.src);vid.src=URL.createObjectURL(f);$("vidEmpty").hidden=true};
+$("vidPlay").onclick=()=>{vOn=!vOn;$("vidPlay").textContent=vOn?"■ Rokein":"▶ Chalayein";
+  if(vOn){if(vid.src)vid.play().catch(()=>{});runV()}else{vid.pause();p3.stop()}};
+
+/* ---------- tabs ---------- */
+document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));
+  ["duaen","display","video","sabak"].forEach(id=>$(id).hidden=id!==b.dataset.tab);
+  p1.stop();setPlay1(false);
+  if(auto){auto=false;p2.stop();$("play2").textContent="▶ Auto-chalayein"}
+  if(vOn){vOn=false;p3.stop();vid.pause();$("vidPlay").textContent="▶ Chalayein"}
+});
+const h=(location.hash||"").slice(1);if(["display","video","sabak"].includes(h))document.querySelector(`[data-tab="${h}"]`).click();
+
+loadVoices();show();showD();showV();updateVoiceNote();
+</script>
+<script>if(window.AndroidTTS){var f=document.getElementById("fs2");if(f)f.hidden=true}</script></body></html>
