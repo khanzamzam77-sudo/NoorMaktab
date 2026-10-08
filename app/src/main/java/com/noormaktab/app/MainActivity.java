@@ -149,7 +149,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
             if (all != null) {
                 for (Voice v : all) {
                     String lang = v.getLocale().getLanguage();
-                    if (!(lang.equals("ar") || lang.equals("hi") || lang.equals("ur") || lang.equals("en"))) continue;
+                    if (!java.util.Arrays.asList("ar","hi","ur","en","bn","id","in","ms","tr","fa","fr","es","de","ru","sw").contains(lang)) continue;
                     Set<String> f = v.getFeatures();
                     if (f != null && f.contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)) continue;
                     voiceList.add(v);
