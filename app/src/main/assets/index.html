@@ -1,6 +1,6 @@
 <!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1b2150"><title>Noor Maktab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Mukta:wght@400;600;700&family=Yatra+One&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Mukta:wght@400;600;700&family=Yatra+One&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap">
 <style>
 /* Layout: app shell — top bar, tabs (Duaen / Display / Video / Sabak); dua reader card with animated star-pattern stage */
 :root{
@@ -73,6 +73,13 @@ label.ctl{display:flex;align-items:center;gap:6px;font-size:.9rem;color:var(--mu
 .has{color:var(--gold)}
 .src{font-size:.85rem;color:var(--muted);background:var(--gold-soft);padding:4px 10px;border-radius:999px}
 .qari{display:inline-block;margin-top:8px;color:var(--gold);font-weight:600}
+html[lang="ur"] body,html[lang="ur"] .btn,html[lang="ur"] input,html[lang="ur"] select,html[lang="ur"] nav.tabs button{font-family:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",var(--f-ar)}
+html[lang="ur"] .tarjuma,html[lang="ur"] .title,html[lang="ur"] .card h3,html[lang="ur"] .brand h1{font-family:"Noto Nastaliq Urdu",var(--f-ar);line-height:2.1}
+html[lang="ur"] .card p,html[lang="ur"] .card li{line-height:2.2}
+html[lang="ur"] .item[aria-current="true"]{box-shadow:inset -3px 0 0 var(--gold)}
+.no-tr .w .tr{display:none}
+.langsel{font:inherit;padding:4px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+@media (max-width:760px){.side .list{max-height:260px}}
 /* Display mode */
 #display .stage{min-height:62vh}
 #display .words{font-size:clamp(2.4rem,7vw,4.6rem)}
@@ -113,23 +120,23 @@ label.ctl{display:flex;align-items:center;gap:6px;font-size:.9rem;color:var(--mu
 <header>
   <div class="brand">
     <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="var(--gold)" stroke-width="2"><rect x="8" y="8" width="24" height="24"/><rect x="8" y="8" width="24" height="24" transform="rotate(45 20 20)"/></g><circle cx="20" cy="20" r="4" fill="var(--gold)"/></svg>
-    <div><h1>Noor Maktab</h1><small>Duaen • Tarjuma • Deen ki Taleem</small></div>
+    <div><h1>Noor Maktab</h1><small data-i18n="tagline">Duaen • Tarjuma • Deen ki Taleem</small></div>
   </div>
-  <div class="prog">Yaad ki hui duaen: <b id="progN">0</b> / <span id="progT">0</span></div>
+  <div class="prog"><label class="ctl" for="langSel">🌐 <select id="langSel" class="langsel" aria-label="Language"></select></label> <span data-i18n="learned">Yaad ki hui duaen:</span> <b id="progN">0</b> / <span id="progT">0</span></div>
 </header>
 
 <nav class="tabs" role="tablist">
-  <button role="tab" data-tab="duaen" aria-selected="true">Duaen</button>
-  <button role="tab" data-tab="display" aria-selected="false">Display (Class)</button>
-  <button role="tab" data-tab="video" aria-selected="false">Video ke saath</button>
-  <button role="tab" data-tab="sabak" aria-selected="false">Sabak</button>
+  <button role="tab" data-tab="duaen" aria-selected="true" data-i18n="tab_duaen">Duaen</button>
+  <button role="tab" data-tab="display" aria-selected="false" data-i18n="tab_display">Display (Class)</button>
+  <button role="tab" data-tab="video" aria-selected="false" data-i18n="tab_video">Video ke saath</button>
+  <button role="tab" data-tab="sabak" aria-selected="false" data-i18n="tab_sabak">Sabak</button>
 </nav>
 
 <!-- DUAEN -->
 <section id="duaen">
   <div class="grid">
     <div class="side">
-      <input type="search" id="q1" placeholder="Dua dhoondein: khana, safar, namaz…" aria-label="Dua dhoondein">
+      <input type="search" id="q1" data-i18n-ph="search" placeholder="Dua dhoondein: khana, safar, namaz…" aria-label="Dua dhoondein">
       <select id="cat1" aria-label="Qism"></select>
       <div class="list" id="list"></div>
     </div>
@@ -143,28 +150,28 @@ label.ctl{display:flex;align-items:center;gap:6px;font-size:.9rem;color:var(--mu
       </div>
       <div class="bar">
         <button class="btn" id="prev1" aria-label="Pichhli dua">◀</button>
-        <button class="btn primary" id="play1">🔊 Audio ke saath chalayein</button>
+        <button class="btn primary" id="play1" data-i18n="play">🔊 Audio ke saath chalayein</button>
         <button class="btn" id="next1" aria-label="Agli dua">▶▶</button>
-        <button class="btn" id="speak1" aria-pressed="true">🔊 Awaaz</button>
-        <button class="btn" id="cont1" aria-pressed="false">⟳ Lagataar (agli dua bhi)</button>
-        <button class="btn" id="hindi1" aria-pressed="false">🗣 Tarjuma bhi sunao</button>
-        <button class="btn" id="hide1" aria-pressed="false">Yaad karo (chhupao)</button>
+        <button class="btn" id="speak1" data-i18n="voice" aria-pressed="true">🔊 Awaaz</button>
+        <button class="btn" id="cont1" data-i18n="cont" aria-pressed="false">⟳ Lagataar (agli dua bhi)</button>
+        <button class="btn" id="hindi1" data-i18n="saytr" aria-pressed="false">🗣 Tarjuma bhi sunao</button>
+        <button class="btn" id="hide1" data-i18n="hide" aria-pressed="false">Yaad karo (chhupao)</button>
         <button class="btn" id="mark1">✓ Yaad ho gayi</button>
         <span class="src" id="src1"></span>
-        <label class="ctl" for="speed1">Raftar <input type="range" id="speed1" min="0.5" max="1.6" step="0.1" value="1"></label>
+        <label class="ctl" for="speed1"><span data-i18n="speed">Raftar</span> <input type="range" id="speed1" min="0.5" max="1.6" step="0.1" value="1"></label>
       </div>
       <div class="meta">
-        <div class="card"><h3>Hindi tarjuma</h3><p id="tarFull"></p><p class="note" id="ref1"></p>
-          <a class="qari" id="qari1" href="#" target="_blank" rel="noopener" hidden>▶ Qari ki tilawat sunein (Quran.com)</a></div>
-        <div class="card"><h3>Audio</h3>
-          <label class="ctl" for="voiceSel" style="flex-wrap:wrap">Arabic awaaz <select id="voiceSel" style="max-width:100%"></select></label>
+        <div class="card"><h3 data-i18n="tarjuma">Tarjuma</h3><p id="tarFull"></p><p class="note" id="ref1"></p>
+          <a class="qari" id="qari1" href="#" target="_blank" rel="noopener" hidden data-i18n="qari">▶ Qari ki tilawat sunein (Quran.com)</a></div>
+        <div class="card"><h3 data-i18n="audio">Audio</h3>
+          <label class="ctl" for="voiceSel" style="flex-wrap:wrap"><span data-i18n="arvoice">Arabic awaaz</span> <select id="voiceSel" style="max-width:100%"></select></label>
           <p class="note" id="voiceNote"></p>
-          <p class="note" style="margin-top:8px"><b>Is dua ki recording lagayein:</b></p>
+          <p class="note" style="margin-top:8px"><b data-i18n="rec_one">Is dua ki recording lagayein:</b></p>
           <input class="file" type="file" id="aud1" accept="audio/*">
           <p class="note" id="audName"></p>
-          <button class="btn" id="del1" hidden>Is dua ki recording hatayein</button>
+          <button class="btn" id="del1" data-i18n="rec_del" hidden>Is dua ki recording hatayein</button>
           <p class="note" id="shareNote"></p>
-          <p class="note" style="margin-top:8px"><b>Sab duaon ki audio ek saath:</b> files ke naam dua number se rakhein (01.mp3, 02.mp3 …).</p>
+          <p class="note" style="margin-top:8px" data-i18n="rec_pack">Sab duaon ki audio ek saath: files ke naam dua number se rakhein (01.mp3, 02.mp3 …).</p>
           <input class="file" type="file" id="pack1" accept="audio/*" multiple>
           <p class="note" id="packNote"></p>
         </div>
@@ -184,16 +191,16 @@ label.ctl{display:flex;align-items:center;gap:6px;font-size:.9rem;color:var(--mu
       <p class="tarjuma" id="tar2"></p>
     </div>
     <div class="bar">
-      <button class="btn primary" id="play2">▶ Auto-chalayein</button>
-      <button class="btn" id="prev2">◀ Pichhli</button>
-      <button class="btn" id="next2">Agli ▶</button>
-      <button class="btn" id="fs2">⛶ Poori screen</button>
-      <button class="btn" id="speak2" aria-pressed="true">🔊 Awaaz</button>
-      <button class="btn" id="hindi2" aria-pressed="false">🗣 Tarjuma</button>
-      <label class="ctl" for="cat2">Qism <select id="cat2"></select></label>
-      <label class="ctl" for="rep2">Har dua <select id="rep2"><option>1</option><option selected>2</option><option>3</option></select> baar</label>
+      <button class="btn primary" id="play2" data-i18n="autoplay">▶ Auto-chalayein</button>
+      <button class="btn" id="prev2" data-i18n="prev">◀ Pichhli</button>
+      <button class="btn" id="next2" data-i18n="next">Agli ▶</button>
+      <button class="btn" id="fs2" data-i18n="full">⛶ Poori screen</button>
+      <button class="btn" id="speak2" data-i18n="voice" aria-pressed="true">🔊 Awaaz</button>
+      <button class="btn" id="hindi2" data-i18n="tr_short" aria-pressed="false">🗣 Tarjuma</button>
+      <label class="ctl" for="cat2"><span data-i18n="kind">Qism</span> <select id="cat2"></select></label>
+      <label class="ctl" for="rep2"><span data-i18n="each">Har dua</span> <select id="rep2"><option>1</option><option selected>2</option><option>3</option></select> <span data-i18n="times">baar</span></label>
     </div>
-    <p class="note">Class mein projector ya TV par lagayein. Har dua lafz-ba-lafz chalegi, phir agli dua apne aap aayegi.</p>
+    <p class="note" data-i18n="display_note">Class mein projector ya TV par lagayein. Har dua lafz-ba-lafz chalegi, phir agli dua apne aap aayegi.</p>
   </div>
 </section>
 
@@ -201,16 +208,16 @@ label.ctl{display:flex;align-items:center;gap:6px;font-size:.9rem;color:var(--mu
 <section id="video" hidden>
   <div class="grid">
     <div class="card">
-      <h3>Video chunein</h3>
-      <p class="note">Apni koi bhi video (masjid, qudrat, background) lagayein. Dua uske upar tarjume ke saath chalegi.</p>
+      <h3 data-i18n="vid_pick">Video chunein</h3>
+      <p class="note" data-i18n="vid_note">Apni koi bhi video (masjid, qudrat, background) lagayein. Dua uske upar tarjume ke saath chalegi.</p>
       <input class="file" type="file" id="vidIn" accept="video/*">
-      <p style="margin-top:12px"><label class="ctl" for="vidDua">Dua <select id="vidDua"></select></label></p>
-      <div class="bar" style="margin-top:10px"><button class="btn primary" id="vidPlay">▶ Chalayein</button><button class="btn" id="speak3" aria-pressed="true">🔊 Awaaz</button></div>
+      <p style="margin-top:12px"><label class="ctl" for="vidDua"><span data-i18n="dua">Dua</span> <select id="vidDua"></select></label></p>
+      <div class="bar" style="margin-top:10px"><button class="btn primary" id="vidPlay" data-i18n="vplay">▶ Chalayein</button><button class="btn" id="speak3" data-i18n="voice" aria-pressed="true">🔊 Awaaz</button></div>
     </div>
     <div class="reader">
       <div class="vbox">
         <video id="vid" playsinline muted loop></video>
-        <div class="empty" id="vidEmpty">Video lagane ke baad yahan dua upar chalegi</div>
+        <div class="empty" id="vidEmpty" data-i18n="vid_empty">Video lagane ke baad yahan dua upar chalegi</div>
         <div class="ov"><div class="words" id="words3"></div><p class="tarjuma" id="tar3"></p></div>
       </div>
     </div>
@@ -219,26 +226,8 @@ label.ctl{display:flex;align-items:center;gap:6px;font-size:.9rem;color:var(--mu
 
 <!-- SABAK -->
 <section id="sabak" hidden>
-  <div class="lessons">
-    <div class="card"><h3>Islam ke 5 Arkan</h3><ol>
-      <li><b>Kalima (Shahadat)</b> — Allah ke siwa koi mabood nahin, Muhammad ﷺ Allah ke Rasool hain</li>
-      <li><b>Namaz</b> — din mein 5 waqt</li>
-      <li><b>Roza</b> — Ramzan ke mahine mein</li>
-      <li><b>Zakat</b> — maal par saal mein ek baar</li>
-      <li><b>Hajj</b> — taaqat ho to zindagi mein ek baar</li></ol></div>
-    <div class="card"><h3>Iman ki 6 baaten</h3><ol>
-      <li>Allah par iman</li><li>Farishton par</li><li>Aasmani kitabon par</li>
-      <li>Rasoolon par</li><li>Qayamat ke din par</li><li>Taqdeer (achchhi aur buri) par</li></ol></div>
-    <div class="card"><h3>Wuzu ke 4 Farz (Hanafi)</h3><ol>
-      <li>Poora chehra dhona</li><li>Dono haath kohniyon samet dhona</li>
-      <li>Chauthai sar ka masah karna</li><li>Dono paon takhnon samet dhona</li></ol>
-      <p class="note">Shuru mein Bismillah padhein; aakhir mein Kalima-e-Shahadat.</p></div>
-    <div class="card"><h3>5 Waqt ki Namaz</h3><ul>
-      <li><b>Fajr</b> — 2 farz</li><li><b>Zuhr</b> — 4 farz</li><li><b>Asr</b> — 4 farz</li>
-      <li><b>Maghrib</b> — 3 farz</li><li><b>Isha</b> — 4 farz (+ 3 witr)</li></ul>
-      <p class="note">Sunnat aur nafl alag hain; ustaad se tafseel seekhein.</p></div>
-  </div>
-  <p class="note" style="margin-top:14px">Masail ki tafseel apne maslak ke ulama se zaroor tasdeeq karein.</p>
+  <div class="lessons" id="lessons"></div>
+  <p class="note" style="margin-top:14px" data-i18n="verify">Masail ki tafseel apne maslak ke ulama se zaroor tasdeeq karein.</p>
 </section>
 </div>
 
@@ -480,12 +469,200 @@ const RAW=[
 "Koi fikr ki baat nahin, Allah ne chaha to yeh (bimari gunaahon se) paak karne wali hai.","Sahih Bukhari"]
 ];
 
+/* ---------- languages: rh = Roman Hindi (Hinglish), hi = हिन्दी, ur = اردو, en = English ---------- */
+const LANGS=[["rh","Hinglish"],["hi","हिन्दी"],["ur","اردو"],["en","English"]];
+const UI={
+ tagline:["Duaen • Tarjuma • Deen ki Taleem","दुआएँ • तर्जुमा • दीन की तालीम","دعائیں • ترجمہ • دین کی تعلیم","Duas • Translation • Learning the Deen"],
+ learned:["Yaad ki hui duaen:","याद की हुई दुआएँ:","یاد کی ہوئی دعائیں:","Duas learned:"],
+ tab_duaen:["Duaen","दुआएँ","دعائیں","Duas"],
+ tab_display:["Display (Class)","डिस्प्ले (क्लास)","ڈسپلے (کلاس)","Display (Class)"],
+ tab_video:["Video ke saath","वीडियो के साथ","ویڈیو کے ساتھ","With video"],
+ tab_sabak:["Sabak","सबक़","سبق","Lessons"],
+ search:["Dua dhoondein: khana, safar, namaz…","दुआ ढूँढें: खाना, सफ़र, नमाज़…","دعا تلاش کریں: کھانا، سفر، نماز…","Find a dua: food, travel, prayer…"],
+ all:["Sab","सब","سب","All"],
+ all_duas:["Sab duaen","सब दुआएँ","سب دعائیں","All duas"],
+ play:["🔊 Audio ke saath chalayein","🔊 आवाज़ के साथ चलाएँ","🔊 آواز کے ساتھ چلائیں","🔊 Play with audio"],
+ stop:["■ Rokein","■ रोकें","■ روکیں","■ Stop"],
+ voice:["🔊 Awaaz","🔊 आवाज़","🔊 آواز","🔊 Voice"],
+ cont:["⟳ Lagataar (agli dua bhi)","⟳ लगातार (अगली दुआ भी)","⟳ مسلسل (اگلی دعا بھی)","⟳ Continuous (next dua too)"],
+ saytr:["🗣 Tarjuma bhi sunao","🗣 तर्जुमा भी सुनाओ","🗣 ترجمہ بھی سنائیں","🗣 Also speak translation"],
+ hide:["Yaad karo (chhupao)","याद करो (छुपाओ)","یاد کرو (چھپاؤ)","Memorise (hide)"],
+ mark:["✓ Yaad ho gayi","✓ याद हो गई","✓ یاد ہو گئی","✓ Learned"],
+ unmark:["↺ Dobara seekhein","↺ दोबारा सीखें","↺ دوبارہ سیکھیں","↺ Learn again"],
+ speed:["Raftar","रफ़्तार","رفتار","Speed"],
+ tarjuma:["Tarjuma","तर्जुमा","ترجمہ","Translation"],
+ hawala:["Hawala","हवाला","حوالہ","Reference"],
+ qari:["▶ Qari ki tilawat sunein (Quran.com)","▶ क़ारी की तिलावत सुनें (Quran.com)","▶ قاری کی تلاوت سنیں (Quran.com)","▶ Listen to a Qari (Quran.com)"],
+ audio:["Audio","ऑडियो","آڈیو","Audio"],
+ arvoice:["Arabic awaaz","अरबी आवाज़","عربی آواز","Arabic voice"],
+ rec_one:["Is dua ki recording lagayein:","इस दुआ की रिकॉर्डिंग लगाएँ:","اس دعا کی ریکارڈنگ لگائیں:","Add a recording for this dua:"],
+ rec_del:["Is dua ki recording hatayein","इस दुआ की रिकॉर्डिंग हटाएँ","اس دعا کی ریکارڈنگ ہٹائیں","Remove this dua's recording"],
+ rec_pack:["Sab duaon ki audio ek saath: files ke naam dua number se rakhein (01.mp3, 02.mp3 …).","सब दुआओं की ऑडियो एक साथ: फ़ाइलों के नाम दुआ नंबर से रखें (01.mp3, 02.mp3 …)।","سب دعاؤں کی آڈیو ایک ساتھ: فائلوں کے نام دعا نمبر سے رکھیں (01.mp3، 02.mp3 …)۔","All recordings at once: name files by dua number (01.mp3, 02.mp3 …)."],
+ autoplay:["▶ Auto-chalayein","▶ अपने आप चलाएँ","▶ خود بخود چلائیں","▶ Autoplay"],
+ prev:["◀ Pichhli","◀ पिछली","◀ پچھلی","◀ Previous"],
+ next:["Agli ▶","अगली ▶","اگلی ▶","Next ▶"],
+ full:["⛶ Poori screen","⛶ पूरी स्क्रीन","⛶ پوری اسکرین","⛶ Full screen"],
+ tr_short:["🗣 Tarjuma","🗣 तर्जुमा","🗣 ترجمہ","🗣 Translation"],
+ kind:["Qism","क़िस्म","قسم","Category"],
+ each:["Har dua","हर दुआ","ہر دعا","Each dua"],
+ times:["baar","बार","بار","times"],
+ display_note:["Class mein projector ya TV par lagayein. Har dua lafz-ba-lafz chalegi, phir agli dua apne aap aayegi.","क्लास में प्रोजेक्टर या टीवी पर लगाएँ। हर दुआ लफ़्ज़-ब-लफ़्ज़ चलेगी, फिर अगली दुआ अपने आप आएगी।","کلاس میں پروجیکٹر یا ٹی وی پر لگائیں۔ ہر دعا لفظ بہ لفظ چلے گی، پھر اگلی دعا خود بخود آئے گی۔","Use it on a projector or TV in class. Each dua plays word by word, then the next one starts by itself."],
+ vid_pick:["Video chunein","वीडियो चुनें","ویڈیو منتخب کریں","Choose a video"],
+ vid_note:["Apni koi bhi video (masjid, qudrat, background) lagayein. Dua uske upar tarjume ke saath chalegi.","अपनी कोई भी वीडियो (मस्जिद, क़ुदरत, बैकग्राउंड) लगाएँ। दुआ उसके ऊपर तर्जुमे के साथ चलेगी।","اپنی کوئی بھی ویڈیو (مسجد، قدرت، پس منظر) لگائیں۔ دعا اس کے اوپر ترجمے کے ساتھ چلے گی۔","Add any video of your own (a mosque, nature, a background). The dua plays over it with its translation."],
+ dua:["Dua","दुआ","دعا","Dua"],
+ vplay:["▶ Chalayein","▶ चलाएँ","▶ چلائیں","▶ Play"],
+ vid_empty:["Video lagane ke baad yahan dua upar chalegi","वीडियो लगाने के बाद यहाँ दुआ ऊपर चलेगी","ویڈیو لگانے کے بعد یہاں دعا اوپر چلے گی","After you add a video, the dua plays over it here"],
+ not_found:["Koi dua nahin mili. Doosra lafz likh kar dekhein.","कोई दुआ नहीं मिली। दूसरा लफ़्ज़ लिख कर देखें।","کوئی دعا نہیں ملی۔ دوسرا لفظ لکھ کر دیکھیں۔","No dua found. Try another word."],
+ this_audio:["Is dua ki audio: ","इस दुआ की ऑडियो: ","اس دعا کی آڈیو: ","This dua's audio: "],
+ saving:["Save ho rahi hai…","सेव हो रही है…","محفوظ ہو رہی ہے…","Saving…"],
+ saved:["Save ho gayi: ","सेव हो गई: ","محفوظ ہو گئی: ","Saved: "],
+ matched:["audio file duaon se jud gayin.","ऑडियो फ़ाइलें दुआओं से जुड़ गईं।","آڈیو فائلیں دعاؤں سے جڑ گئیں۔","audio files matched to duas."],
+ nomatch:["In ka number nahin mila:","इनका नंबर नहीं मिला:","ان کا نمبر نہیں ملا:","No number found for:"],
+ saving_n:["Save ho rahi hain:","सेव हो रही हैं:","محفوظ ہو رہی ہیں:","Saving:"],
+ saved_n:["recordings save ho gayin.","रिकॉर्डिंग्स सेव हो गईं।","ریکارڈنگز محفوظ ہو گئیں۔","recordings saved."],
+ save_fail:["Recording save nahin hui. Is device par chalegi.","रिकॉर्डिंग सेव नहीं हुई। इस डिवाइस पर चलेगी।","ریکارڈنگ محفوظ نہیں ہوئی۔ اس ڈیوائس پر چلے گی۔","The recording was not saved. It will still play on this device."],
+ share_on:["Aap jo recording lagayenge woh app mein save ho jayegi; har student ko apne aap sunai degi.","आप जो रिकॉर्डिंग लगाएँगे वो ऐप में सेव हो जाएगी; हर स्टूडेंट को अपने आप सुनाई देगी।","آپ جو ریکارڈنگ لگائیں گے وہ ایپ میں محفوظ ہو جائے گی؛ ہر طالب علم کو خود بخود سنائی دے گی۔","Recordings you add are saved in the app, and every student hears them automatically."],
+ share_local:["Aap jo recording lagayenge woh is device mein save rahegi aur agli baar bhi chalegi.","आप जो रिकॉर्डिंग लगाएँगे वो इस डिवाइस में सेव रहेगी और अगली बार भी चलेगी।","آپ جو ریکارڈنگ لگائیں گے وہ اس ڈیوائس میں محفوظ رہے گی اور اگلی بار بھی چلے گی۔","Recordings you add stay saved on this device and play next time too."],
+ src_rec:["♪ Recording: ","♪ रिकॉर्डिंग: ","♪ ریکارڈنگ: ","♪ Recording: "],
+ src_loading:["♪ Recording (load ho rahi hai…)","♪ रिकॉर्डिंग (लोड हो रही है…)","♪ ریکارڈنگ (لوڈ ہو رہی ہے…)","♪ Recording (loading…)"],
+ src_voice:["🔊 Arabic awaaz: ","🔊 अरबी आवाज़: ","🔊 عربی آواز: ","🔊 Arabic voice: "],
+ src_none:["Awaaz uplabdh nahin: sirf alfaaz chalenge","आवाज़ उपलब्ध नहीं: सिर्फ़ अल्फ़ाज़ चलेंगे","آواز دستیاب نہیں: صرف الفاظ چلیں گے","No voice available: only the words will play"],
+ no_ar:["Koi Arabic awaaz nahin mili","कोई अरबी आवाज़ नहीं मिली","کوئی عربی آواز نہیں ملی","No Arabic voice found"],
+ voice_ok:["Sabse saaf Arabic awaaz apne aap chuni gayi hai. Neeche se badal bhi sakte hain; 'Natural' ya 'Online' wali awaaz sabse saaf hoti hai.","सबसे साफ़ अरबी आवाज़ अपने आप चुनी गई है। यहाँ से बदल भी सकते हैं; 'Natural' या 'Online' वाली आवाज़ सबसे साफ़ होती है।","سب سے صاف عربی آواز خود بخود چنی گئی ہے۔ یہاں سے بدل بھی سکتے ہیں؛ 'Natural' یا 'Online' والی آواز سب سے صاف ہوتی ہے۔","The clearest Arabic voice was picked for you. You can change it here; voices marked 'Natural' or 'Online' sound clearest."],
+ voice_none:["Is device mein Arabic awaaz nahin hai. Android: Settings → Text-to-speech → Google speech engine → Install voice data → Arabic. Computer: Microsoft Edge mein kholein.","इस डिवाइस में अरबी आवाज़ नहीं है। Android: Settings → Text-to-speech → Google speech engine → Install voice data → Arabic. कंप्यूटर: Microsoft Edge में खोलें।","اس ڈیوائس میں عربی آواز نہیں ہے۔ Android: Settings → Text-to-speech → Google speech engine → Install voice data → Arabic. کمپیوٹر: Microsoft Edge میں کھولیں۔","This device has no Arabic voice. Android: Settings → Text-to-speech → Google speech engine → Install voice data → Arabic. Computer: open the app in Microsoft Edge."],
+ lang:["Zabaan","भाषा","زبان","Language"],
+ verify:["Masail ki tafseel apne maslak ke ulama se zaroor tasdeeq karein.","मसाइल की तफ़्सील अपने मसलक के उलमा से ज़रूर तस्दीक़ करें।","مسائل کی تفصیل اپنے مسلک کے علماء سے ضرور تصدیق کریں۔","Please confirm the details of rulings with the scholars of your school."]
+};
+const CATS_T={
+ "Kalime":["Kalime","कलिमे","کلمے","Kalimas"],
+ "Rozana":["Rozana","रोज़ाना","روزانہ","Daily"],
+ "Khana-Peena":["Khana-Peena","खाना-पीना","کھانا پینا","Food & Drink"],
+ "Namaz aur Ibadat":["Namaz aur Ibadat","नमाज़ और इबादत","نماز اور عبادت","Prayer & Worship"],
+ "Quran ki Duaen":["Quran ki Duaen","क़ुरआन की दुआएँ","قرآن کی دعائیں","Duas from the Quran"],
+ "Hifazat aur Pareshani":["Hifazat aur Pareshani","हिफ़ाज़त और परेशानी","حفاظت اور پریشانی","Protection & Hardship"]
+};
+const REF_T={hi:[["Sahih Bukhari","सहीह बुख़ारी"],["Sahih Muslim","सहीह मुस्लिम"],["Sunan Abu Dawood","सुनन अबू दाऊद"],["Abu Dawood","अबू दाऊद"],["Jami Tirmizi","जामे तिर्मिज़ी"],["Tirmizi","तिर्मिज़ी"],["Musnad Ahmad","मुसनद अहमद"],["Muslim","मुस्लिम"],["Quran","क़ुरआन"],["Mashhoor masnoon dua","मशहूर मसनून दुआ"],["Kalima Tayyiba","कलिमा तय्यिबा"]],
+ ur:[["Sahih Bukhari","صحیح بخاری"],["Sahih Muslim","صحیح مسلم"],["Sunan Abu Dawood","سنن ابو داؤد"],["Abu Dawood","ابو داؤد"],["Jami Tirmizi","جامع ترمذی"],["Tirmizi","ترمذی"],["Musnad Ahmad","مسند احمد"],["Muslim","مسلم"],["Quran","قرآن"],["Mashhoor masnoon dua","مشہور مسنون دعا"],["Kalima Tayyiba","کلمہ طیبہ"],[", ","، "]],
+ en:[["Jami Tirmizi","Jami at-Tirmidhi"],["Tirmizi","Tirmidhi"],["Sunan Abu Dawood","Sunan Abu Dawud"],["Abu Dawood","Abu Dawud"],["Mashhoor masnoon dua","Well-known Sunnah dua"]]};
+
+/* name, occasion, translation — per dua, per language */
+const DT={
+kalima1:{hi:["पहला कलिमा (तय्यिबा)","ईमान की बुनियाद","अल्लाह के सिवा कोई माबूद नहीं, मुहम्मद ﷺ अल्लाह के रसूल हैं।"],ur:["پہلا کلمہ (طیبہ)","ایمان کی بنیاد","اللہ کے سوا کوئی معبود نہیں، محمد ﷺ اللہ کے رسول ہیں۔"],en:["First Kalima (Tayyiba)","The foundation of faith","There is no god but Allah; Muhammad ﷺ is the Messenger of Allah."]},
+kalima2:{hi:["दूसरा कलिमा (शहादत)","ईमान की गवाही","मैं गवाही देता हूँ कि अल्लाह के सिवा कोई माबूद नहीं, वो अकेला है, उसका कोई शरीक नहीं; और मैं गवाही देता हूँ कि मुहम्मद ﷺ उसके बंदे और रसूल हैं।"],ur:["دوسرا کلمہ (شہادت)","ایمان کی گواہی","میں گواہی دیتا ہوں کہ اللہ کے سوا کوئی معبود نہیں، وہ اکیلا ہے، اس کا کوئی شریک نہیں؛ اور میں گواہی دیتا ہوں کہ محمد ﷺ اس کے بندے اور رسول ہیں۔"],en:["Second Kalima (Shahadah)","Bearing witness to faith","I bear witness that there is no god but Allah, alone, with no partner; and I bear witness that Muhammad ﷺ is His servant and Messenger."]},
+bismillah:{hi:["बिस्मिल्लाह","हर काम शुरू करने से पहले","अल्लाह के नाम से जो बड़ा मेहरबान, निहायत रहम वाला है।"],ur:["بسم اللہ","ہر کام شروع کرنے سے پہلے","اللہ کے نام سے جو بڑا مہربان، نہایت رحم والا ہے۔"],en:["Bismillah","Before starting anything","In the name of Allah, the Most Gracious, the Most Merciful."]},
+sona:{hi:["सोने से पहले","बिस्तर पर लेटने के बाद","ऐ अल्लाह! तेरे ही नाम से मैं मरता (सोता) हूँ और जीता (जागता) हूँ।"],ur:["سونے سے پہلے","بستر پر لیٹنے کے بعد","اے اللہ! تیرے ہی نام سے میں مرتا (سوتا) ہوں اور جیتا (جاگتا) ہوں۔"],en:["Before sleeping","After lying down in bed","O Allah, in Your name I die (sleep) and I live (wake)."]},
+jagna:{hi:["नींद से जागने पर","सुबह उठते ही","सब तारीफ़ अल्लाह के लिए है जिसने हमें मौत (नींद) के बाद ज़िंदगी दी, और उसी की तरफ़ लौट कर जाना है।"],ur:["نیند سے جاگنے پر","صبح اٹھتے ہی","سب تعریف اللہ کے لیے ہے جس نے ہمیں موت (نیند) کے بعد زندگی دی، اور اسی کی طرف لوٹ کر جانا ہے۔"],en:["On waking up","As soon as you get up","All praise is for Allah who gave us life after death (sleep), and to Him is the return."]},
+ghar_nikal:{hi:["घर से निकलते वक़्त","दरवाज़े से बाहर जाते हुए","अल्लाह के नाम से, मैंने अल्लाह पर भरोसा किया। अल्लाह के बग़ैर न कोई ताक़त है न क़ुव्वत।"],ur:["گھر سے نکلتے وقت","دروازے سے باہر جاتے ہوئے","اللہ کے نام سے، میں نے اللہ پر بھروسہ کیا۔ اللہ کے بغیر نہ کوئی طاقت ہے نہ قوت۔"],en:["Leaving the house","Going out of the door","In the name of Allah; I place my trust in Allah. There is no power and no strength except with Allah."]},
+ghar_dakhil:{hi:["घर में दाख़िल होते वक़्त","घर आकर सलाम से पहले","अल्लाह के नाम से हम दाख़िल हुए, अल्लाह के नाम से हम निकले, और अपने रब पर ही हमने भरोसा किया।"],ur:["گھر میں داخل ہوتے وقت","گھر آ کر سلام سے پہلے","اللہ کے نام سے ہم داخل ہوئے، اللہ کے نام سے ہم نکلے، اور اپنے رب پر ہی ہم نے بھروسہ کیا۔"],en:["Entering the house","On coming home, before giving salam","In the name of Allah we enter, in the name of Allah we leave, and upon our Lord we rely."]},
+toilet1:{hi:["बैतुल-ख़ला जाने से पहले","अंदर जाने से पहले (बायाँ पाँव)","ऐ अल्लाह! मैं तुझ से नापाक जिन्नों (नर और मादा) से पनाह माँगता हूँ।"],ur:["بیت الخلاء جانے سے پہلے","اندر جانے سے پہلے (بایاں پاؤں)","اے اللہ! میں تجھ سے ناپاک جنوں (نر اور مادہ) سے پناہ مانگتا ہوں۔"],en:["Before entering the toilet","Before going in (left foot first)","O Allah, I seek refuge in You from the male and female evil jinn."]},
+toilet2:{hi:["बैतुल-ख़ला से निकलने पर","बाहर आते हुए (दायाँ पाँव)","(ऐ अल्लाह!) मैं तेरी मग़फ़िरत चाहता हूँ।"],ur:["بیت الخلاء سے نکلنے پر","باہر آتے ہوئے (دایاں پاؤں)","(اے اللہ!) میں تیری مغفرت چاہتا ہوں۔"],en:["Leaving the toilet","Coming out (right foot first)","(O Allah,) I seek Your forgiveness."]},
+kapde:{hi:["कपड़े पहनते वक़्त","नया या कोई भी लिबास पहनते हुए","सब तारीफ़ अल्लाह के लिए जिसने मुझे यह पहनाया और मेरी किसी ताक़त और क़ुव्वत के बग़ैर मुझे यह अता किया।"],ur:["کپڑے پہنتے وقت","نیا یا کوئی بھی لباس پہنتے ہوئے","سب تعریف اللہ کے لیے جس نے مجھے یہ پہنایا اور میری کسی طاقت اور قوت کے بغیر مجھے یہ عطا کیا۔"],en:["Putting on clothes","When wearing any garment","All praise is for Allah who clothed me with this and provided it for me without any power or strength of my own."]},
+aaina:{hi:["आईना देखते वक़्त","शीशा देखने पर","ऐ अल्लाह! तूने मेरी सूरत अच्छी बनाई, तो मेरे अख़लाक़ भी अच्छे कर दे।"],ur:["آئینہ دیکھتے وقت","شیشہ دیکھنے پر","اے اللہ! تو نے میری صورت اچھی بنائی، تو میرے اخلاق بھی اچھے کر دے۔"],en:["Looking in the mirror","When you see yourself","O Allah, You made my appearance beautiful, so make my character beautiful too."]},
+sawari:{hi:["सवारी पर बैठते वक़्त","गाड़ी, बस, ट्रेन पर","पाक है वो ज़ात जिसने इस (सवारी) को हमारे बस में कर दिया, वरना हम इसे क़ाबू में नहीं कर सकते थे, और बेशक हम अपने रब की तरफ़ लौटने वाले हैं।"],ur:["سواری پر بیٹھتے وقت","گاڑی، بس، ٹرین پر","پاک ہے وہ ذات جس نے اس (سواری) کو ہمارے بس میں کر دیا، ورنہ ہم اسے قابو میں نہیں کر سکتے تھے، اور بے شک ہم اپنے رب کی طرف لوٹنے والے ہیں۔"],en:["Boarding a vehicle","Car, bus or train","Glory be to the One who has placed this (vehicle) at our service, for we could not have done so ourselves; and surely to our Lord we shall return."]},
+chheenk:{hi:["छींक आने पर","छींकने वाला कहे; सुनने वाला 'यरहमुकल्लाह' कहे","छींकने वाला: सब तारीफ़ अल्लाह के लिए। सुनने वाला: अल्लाह तुम पर रहम करे। छींकने वाला जवाब दे: अल्लाह तुम्हें हिदायत दे और तुम्हारा हाल दुरुस्त करे।"],ur:["چھینک آنے پر","چھینکنے والا کہے؛ سننے والا 'یرحمک اللہ' کہے","چھینکنے والا: سب تعریف اللہ کے لیے۔ سننے والا: اللہ تم پر رحم کرے۔ چھینکنے والا جواب دے: اللہ تمہیں ہدایت دے اور تمہارا حال درست کرے۔"],en:["On sneezing","The sneezer says it; the listener replies 'Yarhamukallah'","Sneezer: All praise is for Allah. Listener: May Allah have mercy on you. Sneezer replies: May Allah guide you and set your affairs right."]},
+shukriya:{hi:["शुक्रिया अदा करना","कोई एहसान करे तो","अल्लाह तुम्हें बेहतरीन बदला दे।"],ur:["شکریہ ادا کرنا","کوئی احسان کرے تو","اللہ تمہیں بہترین بدلہ دے۔"],en:["Saying thank you","When someone does you a kindness","May Allah reward you with goodness."]},
+chaand:{hi:["नया चाँद देखने पर","हर महीने की पहली रात","ऐ अल्लाह! इस चाँद को हम पर अमन, ईमान, सलामती और इस्लाम के साथ निकाल। (ऐ चाँद!) मेरा और तेरा रब अल्लाह है।"],ur:["نیا چاند دیکھنے پر","ہر مہینے کی پہلی رات","اے اللہ! اس چاند کو ہم پر امن، ایمان، سلامتی اور اسلام کے ساتھ نکال۔ (اے چاند!) میرا اور تیرا رب اللہ ہے۔"],en:["On seeing the new moon","The first night of each month","O Allah, bring this moon over us with security, faith, safety and Islam. (O moon,) my Lord and your Lord is Allah."]},
+baarish:{hi:["बारिश होने पर","बारिश शुरू हो तो","ऐ अल्लाह! इसे फ़ायदा देने वाली बारिश बना।"],ur:["بارش ہونے پر","بارش شروع ہو تو","اے اللہ! اسے فائدہ دینے والی بارش بنا۔"],en:["When it rains","When rain begins","O Allah, make it a beneficial rain."]},
+majlis:{hi:["मजलिस ख़त्म होने पर","बैठक या क्लास के आख़िर में","ऐ अल्लाह! तू पाक है अपनी तारीफ़ के साथ। मैं गवाही देता हूँ कि तेरे सिवा कोई माबूद नहीं। मैं तुझ से माफ़ी माँगता हूँ और तेरी तरफ़ तौबा करता हूँ।"],ur:["مجلس ختم ہونے پر","بیٹھک یا کلاس کے آخر میں","اے اللہ! تو پاک ہے اپنی تعریف کے ساتھ۔ میں گواہی دیتا ہوں کہ تیرے سوا کوئی معبود نہیں۔ میں تجھ سے معافی مانگتا ہوں اور تیری طرف توبہ کرتا ہوں۔"],en:["At the end of a gathering","At the end of a meeting or class","Glory be to You, O Allah, and praise. I bear witness that there is no god but You. I seek Your forgiveness and turn to You in repentance."]},
+shaadi:{hi:["दूल्हा-दुल्हन को मुबारकबाद","निकाह के मौक़े पर","अल्लाह तुम्हारे लिए बरकत दे, तुम पर बरकत नाज़िल करे और तुम दोनों को भलाई में जमा रखे।"],ur:["دولہا دلہن کو مبارکباد","نکاح کے موقع پر","اللہ تمہارے لیے برکت دے، تم پر برکت نازل کرے اور تم دونوں کو بھلائی میں جمع رکھے۔"],en:["Congratulating the newlyweds","At a nikah","May Allah bless you, shower blessings upon you, and keep you both together in goodness."]},
+khana1:{hi:["खाने से पहले","खाना शुरू करते वक़्त","अल्लाह के नाम से और अल्लाह की बरकत पर (मैं खाना शुरू करता हूँ)।"],ur:["کھانے سے پہلے","کھانا شروع کرتے وقت","اللہ کے نام سے اور اللہ کی برکت پر (میں کھانا شروع کرتا ہوں)۔"],en:["Before eating","When starting a meal","In the name of Allah and with the blessing of Allah (I begin)."]},
+khana_bhool:{hi:["बिस्मिल्लाह भूल जाए तो","खाने के बीच में याद आए","अल्लाह के नाम से, इसके शुरू में भी और आख़िर में भी।"],ur:["بسم اللہ بھول جائے تو","کھانے کے بیچ میں یاد آئے","اللہ کے نام سے، اس کے شروع میں بھی اور آخر میں بھی۔"],en:["If you forgot Bismillah","Remembered in the middle of the meal","In the name of Allah, at its beginning and at its end."]},
+khana2:{hi:["खाने के बाद","खाना ख़त्म करने पर","सब तारीफ़ अल्लाह के लिए है जिसने हमें खिलाया, पिलाया और मुसलमान बनाया।"],ur:["کھانے کے بعد","کھانا ختم کرنے پر","سب تعریف اللہ کے لیے ہے جس نے ہمیں کھلایا، پلایا اور مسلمان بنایا۔"],en:["After eating","On finishing a meal","All praise is for Allah who fed us, gave us drink and made us Muslims."]},
+doodh:{hi:["दूध पीते वक़्त","दूध पीने के बाद","ऐ अल्लाह! हमारे लिए इसमें बरकत दे और हमें यह और ज़्यादा अता फ़रमा।"],ur:["دودھ پیتے وقت","دودھ پینے کے بعد","اے اللہ! ہمارے لیے اس میں برکت دے اور ہمیں یہ اور زیادہ عطا فرما۔"],en:["Drinking milk","After drinking milk","O Allah, bless it for us and give us more of it."]},
+mezbaan:{hi:["मेज़बान (खिलाने वाले) के लिए","दावत खाने के बाद","ऐ अल्लाह! जिसने मुझे खिलाया उसे तू खिला, और जिसने मुझे पिलाया उसे तू पिला।"],ur:["میزبان (کھلانے والے) کے لیے","دعوت کھانے کے بعد","اے اللہ! جس نے مجھے کھلایا اسے تو کھلا، اور جس نے مجھے پلایا اسے تو پلا۔"],en:["For the host","After eating as a guest","O Allah, feed the one who fed me, and give drink to the one who gave me drink."]},
+masjid1:{hi:["मस्जिद में दाख़िल होते वक़्त","दायाँ पाँव अंदर रखते हुए","ऐ अल्लाह! मेरे लिए अपनी रहमत के दरवाज़े खोल दे।"],ur:["مسجد میں داخل ہوتے وقت","دایاں پاؤں اندر رکھتے ہوئے","اے اللہ! میرے لیے اپنی رحمت کے دروازے کھول دے۔"],en:["Entering the mosque","Stepping in with the right foot","O Allah, open for me the doors of Your mercy."]},
+masjid2:{hi:["मस्जिद से निकलते वक़्त","बायाँ पाँव बाहर रखते हुए","ऐ अल्लाह! मैं तुझ से तेरा फ़ज़्ल माँगता हूँ।"],ur:["مسجد سے نکلتے وقت","بایاں پاؤں باہر رکھتے ہوئے","اے اللہ! میں تجھ سے تیرا فضل مانگتا ہوں۔"],en:["Leaving the mosque","Stepping out with the left foot","O Allah, I ask You for Your bounty."]},
+wuzu:{hi:["वुज़ू के बाद","वुज़ू मुकम्मल करके","मैं गवाही देता हूँ कि अल्लाह के सिवा कोई माबूद नहीं, वो अकेला है, उसका कोई शरीक नहीं, और मुहम्मद ﷺ उसके बंदे और रसूल हैं। ऐ अल्लाह! मुझे तौबा करने वालों और पाक रहने वालों में शामिल कर।"],ur:["وضو کے بعد","وضو مکمل کر کے","میں گواہی دیتا ہوں کہ اللہ کے سوا کوئی معبود نہیں، وہ اکیلا ہے، اس کا کوئی شریک نہیں، اور محمد ﷺ اس کے بندے اور رسول ہیں۔ اے اللہ! مجھے توبہ کرنے والوں اور پاک رہنے والوں میں شامل کر۔"],en:["After wudu","On completing ablution","I bear witness that there is no god but Allah, alone, with no partner, and that Muhammad ﷺ is His servant and Messenger. O Allah, make me among those who repent and those who purify themselves."]},
+azaan:{hi:["अज़ान के बाद","अज़ान ख़त्म होने पर","ऐ अल्लाह! इस मुकम्मल पुकार और क़ायम होने वाली नमाज़ के रब! मुहम्मद ﷺ को वसीला और फ़ज़ीलत अता फ़रमा, और उन्हें उस मक़ाम-ए-महमूद पर पहुँचा जिसका तूने उनसे वादा किया है।"],ur:["اذان کے بعد","اذان ختم ہونے پر","اے اللہ! اس مکمل پکار اور قائم ہونے والی نماز کے رب! محمد ﷺ کو وسیلہ اور فضیلت عطا فرما، اور انہیں اس مقامِ محمود پر پہنچا جس کا تو نے ان سے وعدہ کیا ہے۔"],en:["After the adhan","When the call to prayer ends","O Allah, Lord of this perfect call and the prayer about to be established, grant Muhammad ﷺ the Wasilah and virtue, and raise him to the praised station You have promised him."]},
+sana:{hi:["सना","नमाज़ शुरू करते ही (तकबीर के बाद)","ऐ अल्लाह! तू पाक है, तेरी ही तारीफ़ है, तेरा नाम बरकत वाला है, तेरी शान बुलंद है, और तेरे सिवा कोई माबूद नहीं।"],ur:["ثناء","نماز شروع کرتے ہی (تکبیر کے بعد)","اے اللہ! تو پاک ہے، تیری ہی تعریف ہے، تیرا نام برکت والا ہے، تیری شان بلند ہے، اور تیرے سوا کوئی معبود نہیں۔"],en:["Thana (opening praise)","At the start of salah, after takbir","Glory be to You, O Allah, and praise; blessed is Your name, exalted is Your majesty, and there is no god besides You."]},
+ruku:{hi:["रुकू की तस्बीह","रुकू में (कम से कम 3 बार)","पाक है मेरा रब जो अज़मत वाला है।"],ur:["رکوع کی تسبیح","رکوع میں (کم از کم 3 بار)","پاک ہے میرا رب جو عظمت والا ہے۔"],en:["Tasbih in ruku","While bowing (at least 3 times)","Glory be to my Lord, the Magnificent."]},
+qauma:{hi:["रुकू से उठते वक़्त","क़ौमा में","अल्लाह ने उसकी सुन ली जिसने उसकी तारीफ़ की। ऐ हमारे रब! सब तारीफ़ तेरे ही लिए है।"],ur:["رکوع سے اٹھتے وقت","قومہ میں","اللہ نے اس کی سن لی جس نے اس کی تعریف کی۔ اے ہمارے رب! سب تعریف تیرے ہی لیے ہے۔"],en:["Rising from ruku","While standing after bowing","Allah hears the one who praises Him. Our Lord, to You belongs all praise."]},
+sajda:{hi:["सजदे की तस्बीह","सजदे में (कम से कम 3 बार)","पाक है मेरा रब जो सबसे बुलंद है।"],ur:["سجدے کی تسبیح","سجدے میں (کم از کم 3 بار)","پاک ہے میرا رب جو سب سے بلند ہے۔"],en:["Tasbih in sujud","In prostration (at least 3 times)","Glory be to my Lord, the Most High."]},
+durood:{hi:["दुरूद-ए-इब्राहीमी","क़ादा में अत्तहिय्यात के बाद","ऐ अल्लाह! मुहम्मद ﷺ और आल-ए-मुहम्मद पर रहमत नाज़िल फ़रमा जैसे तूने इब्राहीम (अलैहिस्सलाम) और आल-ए-इब्राहीम पर रहमत नाज़िल फ़रमाई; बेशक तू तारीफ़ वाला, बुज़ुर्गी वाला है। ऐ अल्लाह! मुहम्मद ﷺ और आल-ए-मुहम्मद पर बरकत नाज़िल फ़रमा जैसे तूने इब्राहीम और आल-ए-इब्राहीम पर बरकत नाज़िल फ़रमाई; बेशक तू तारीफ़ वाला, बुज़ुर्गी वाला है।"],ur:["درودِ ابراہیمی","قعدہ میں التحیات کے بعد","اے اللہ! محمد ﷺ اور آلِ محمد پر رحمت نازل فرما جیسے تو نے ابراہیم (علیہ السلام) اور آلِ ابراہیم پر رحمت نازل فرمائی؛ بے شک تو تعریف والا، بزرگی والا ہے۔ اے اللہ! محمد ﷺ اور آلِ محمد پر برکت نازل فرما جیسے تو نے ابراہیم اور آلِ ابراہیم پر برکت نازل فرمائی؛ بے شک تو تعریف والا، بزرگی والا ہے۔"],en:["Durood-e-Ibrahimi","In the sitting, after at-Tahiyyat","O Allah, send Your mercy upon Muhammad ﷺ and the family of Muhammad as You sent it upon Ibrahim (peace be upon him) and the family of Ibrahim; You are Praiseworthy, Glorious. O Allah, bless Muhammad ﷺ and the family of Muhammad as You blessed Ibrahim and the family of Ibrahim; You are Praiseworthy, Glorious."]},
+masura:{hi:["दुआ-ए-मासूरा","दुरूद के बाद, सलाम से पहले","ऐ अल्लाह! मैंने अपनी जान पर बहुत ज़ुल्म किया, और तेरे सिवा कोई गुनाहों को माफ़ नहीं करता। तो अपनी तरफ़ से मेरी मग़फ़िरत फ़रमा और मुझ पर रहम कर; बेशक तू बहुत बख़्शने वाला, रहम करने वाला है।"],ur:["دعائے ماثورہ","درود کے بعد، سلام سے پہلے","اے اللہ! میں نے اپنی جان پر بہت ظلم کیا، اور تیرے سوا کوئی گناہوں کو معاف نہیں کرتا۔ تو اپنی طرف سے میری مغفرت فرما اور مجھ پر رحم کر؛ بے شک تو بہت بخشنے والا، رحم کرنے والا ہے۔"],en:["Dua-e-Mathura","After durood, before salam","O Allah, I have wronged myself greatly, and none forgives sins but You. So forgive me with forgiveness from You and have mercy on me; You are the Forgiving, the Merciful."]},
+namaz_baad:{hi:["फ़र्ज़ नमाज़ के बाद","सलाम फेरने के बाद","मैं अल्लाह से माफ़ी माँगता हूँ (3 बार)। ऐ अल्लाह! तू सलामती वाला है और तुझ ही से सलामती है; तू बरकत वाला है, ऐ अज़मत और इज़्ज़त वाले।"],ur:["فرض نماز کے بعد","سلام پھیرنے کے بعد","میں اللہ سے معافی مانگتا ہوں (3 بار)۔ اے اللہ! تو سلامتی والا ہے اور تجھ ہی سے سلامتی ہے؛ تو برکت والا ہے، اے عظمت اور عزت والے۔"],en:["After the obligatory prayer","After the closing salam","I seek Allah's forgiveness (3 times). O Allah, You are Peace and from You comes peace; blessed are You, O Possessor of Majesty and Honour."]},
+iftar1:{hi:["रोज़ा खोलने की दुआ","इफ़्तार के वक़्त","ऐ अल्लाह! मैंने तेरे लिए रोज़ा रखा और तेरे ही रिज़्क़ से इफ़्तार किया।"],ur:["روزہ کھولنے کی دعا","افطار کے وقت","اے اللہ! میں نے تیرے لیے روزہ رکھا اور تیرے ہی رزق سے افطار کیا۔"],en:["Dua for breaking the fast","At iftar","O Allah, for You I fasted and with Your provision I break my fast."]},
+iftar2:{hi:["इफ़्तार के बाद","रोज़ा खोलने के बाद","प्यास चली गई, रगें तर हो गईं, और अल्लाह ने चाहा तो अज्र साबित हो गया।"],ur:["افطار کے بعد","روزہ کھولنے کے بعد","پیاس چلی گئی، رگیں تر ہو گئیں، اور اللہ نے چاہا تو اجر ثابت ہو گیا۔"],en:["After iftar","After breaking the fast","The thirst has gone, the veins are moistened, and the reward is assured, if Allah wills."]},
+qadr:{hi:["शब-ए-क़द्र की दुआ","रमज़ान की आख़िरी रातों में","ऐ अल्लाह! तू बहुत माफ़ करने वाला है, माफ़ी को पसंद करता है, तो मुझे माफ़ कर दे।"],ur:["شبِ قدر کی دعا","رمضان کی آخری راتوں میں","اے اللہ! تو بہت معاف کرنے والا ہے، معافی کو پسند کرتا ہے، تو مجھے معاف کر دے۔"],en:["Dua for Laylat al-Qadr","In the last nights of Ramadan","O Allah, You are Most Forgiving and You love to forgive, so forgive me."]},
+istighfar:{hi:["सय्यिदुल-इस्तिग़फ़ार","सुबह और शाम","ऐ अल्लाह! तू मेरा रब है, तेरे सिवा कोई माबूद नहीं। तूने मुझे पैदा किया और मैं तेरा बंदा हूँ, और जितना हो सके तेरे अहद और वादे पर क़ायम हूँ। मैं अपने किए की बुराई से तेरी पनाह माँगता हूँ। मुझ पर तेरी नेमत का इक़रार करता हूँ और अपने गुनाह का भी इक़रार करता हूँ, तो मुझे माफ़ कर दे, क्योंकि तेरे सिवा कोई गुनाह माफ़ नहीं करता।"],ur:["سید الاستغفار","صبح اور شام","اے اللہ! تو میرا رب ہے، تیرے سوا کوئی معبود نہیں۔ تو نے مجھے پیدا کیا اور میں تیرا بندہ ہوں، اور جتنا ہو سکے تیرے عہد اور وعدے پر قائم ہوں۔ میں اپنے کیے کی برائی سے تیری پناہ مانگتا ہوں۔ مجھ پر تیری نعمت کا اقرار کرتا ہوں اور اپنے گناہ کا بھی اقرار کرتا ہوں، تو مجھے معاف کر دے، کیونکہ تیرے سوا کوئی گناہ معاف نہیں کرتا۔"],en:["Sayyid al-Istighfar","Morning and evening","O Allah, You are my Lord; there is no god but You. You created me and I am Your servant, and I keep Your covenant and promise as best I can. I seek refuge in You from the evil of what I have done. I acknowledge Your favour upon me and I acknowledge my sin, so forgive me, for none forgives sins but You."]},
+zidni:{hi:["इल्म बढ़ने की दुआ","पढ़ाई से पहले","ऐ मेरे रब! मेरे इल्म में इज़ाफ़ा फ़रमा।"],ur:["علم بڑھنے کی دعا","پڑھائی سے پہلے","اے میرے رب! میرے علم میں اضافہ فرما۔"],en:["Dua for more knowledge","Before studying","My Lord, increase me in knowledge."]},
+sharh:{hi:["रब्बिश-रह ली सदरी","सबक़ या तक़रीर से पहले","ऐ मेरे रब! मेरा सीना खोल दे, मेरा काम आसान कर दे, और मेरी ज़ुबान की गिरह खोल दे ताकि लोग मेरी बात समझें।"],ur:["ربِّ اشرح لی صدری","سبق یا تقریر سے پہلے","اے میرے رب! میرا سینہ کھول دے، میرا کام آسان کر دے، اور میری زبان کی گرہ کھول دے تاکہ لوگ میری بات سمجھیں۔"],en:["Rabbish-rah li sadri","Before a lesson or a talk","My Lord, open my chest for me, ease my task for me, and untie the knot from my tongue so they may understand my speech."]},
+walidain:{hi:["वालिदैन के लिए","हर नमाज़ के बाद","ऐ मेरे रब! इन दोनों पर रहम फ़रमा जैसे इन्होंने बचपन में मेरी परवरिश की।"],ur:["والدین کے لیے","ہر نماز کے بعد","اے میرے رب! ان دونوں پر رحم فرما جیسے انہوں نے بچپن میں میری پرورش کی۔"],en:["For parents","After every prayer","My Lord, have mercy on them both as they raised me when I was small."]},
+atina:{hi:["रब्बना आतिना","दुनिया और आख़िरत की भलाई","ऐ हमारे रब! हमें दुनिया में भी भलाई दे और आख़िरत में भी भलाई दे, और हमें दोज़ख़ के अज़ाब से बचा।"],ur:["ربنا آتنا","دنیا اور آخرت کی بھلائی","اے ہمارے رب! ہمیں دنیا میں بھی بھلائی دے اور آخرت میں بھی بھلائی دے، اور ہمیں دوزخ کے عذاب سے بچا۔"],en:["Rabbana Atina","Good in this world and the next","Our Lord, give us good in this world and good in the Hereafter, and protect us from the punishment of the Fire."]},
+zalamna:{hi:["हज़रत आदम (अलैहिस्सलाम) की दुआ","गुनाह की माफ़ी के लिए","ऐ हमारे रब! हमने अपनी जानों पर ज़ुल्म किया, और अगर तू हमें माफ़ न करे और हम पर रहम न करे तो हम ज़रूर नुक़सान उठाने वालों में से हो जाएँगे।"],ur:["حضرت آدم (علیہ السلام) کی دعا","گناہ کی معافی کے لیے","اے ہمارے رب! ہم نے اپنی جانوں پر ظلم کیا، اور اگر تو ہمیں معاف نہ کرے اور ہم پر رحم نہ کرے تو ہم ضرور نقصان اٹھانے والوں میں سے ہو جائیں گے۔"],en:["The dua of Adam (peace be upon him)","Seeking forgiveness for sins","Our Lord, we have wronged ourselves, and if You do not forgive us and have mercy on us, we will surely be among the losers."]},
+yunus:{hi:["हज़रत यूनुस (अलैहिस्सलाम) की दुआ","मुसीबत और परेशानी में","तेरे सिवा कोई माबूद नहीं, तू पाक है; बेशक मैं ही ज़ुल्म करने वालों में से था।"],ur:["حضرت یونس (علیہ السلام) کی دعا","مصیبت اور پریشانی میں","تیرے سوا کوئی معبود نہیں، تو پاک ہے؛ بے شک میں ہی ظلم کرنے والوں میں سے تھا۔"],en:["The dua of Yunus (peace be upon him)","In hardship and distress","There is no god but You; glory be to You. Indeed, I have been among the wrongdoers."]},
+tuzigh:{hi:["ईमान पर क़ायम रहने की दुआ","दिल की मज़बूती के लिए","ऐ हमारे रब! हमें हिदायत देने के बाद हमारे दिलों को टेढ़ा न कर, और हमें अपने पास से रहमत अता फ़रमा; बेशक तू ही सब कुछ देने वाला है।"],ur:["ایمان پر قائم رہنے کی دعا","دل کی مضبوطی کے لیے","اے ہمارے رب! ہمیں ہدایت دینے کے بعد ہمارے دلوں کو ٹیڑھا نہ کر، اور ہمیں اپنے پاس سے رحمت عطا فرما؛ بے شک تو ہی سب کچھ دینے والا ہے۔"],en:["Staying firm in faith","For a steadfast heart","Our Lord, do not let our hearts deviate after You have guided us, and grant us mercy from Yourself; You are the Bestower."]},
+aulad:{hi:["घर वालों और औलाद के लिए","ख़ानदान की भलाई के लिए","ऐ हमारे रब! हमें हमारी बीवियों और औलाद से आँखों की ठंडक अता फ़रमा, और हमें परहेज़गारों का पेशवा बना।"],ur:["گھر والوں اور اولاد کے لیے","خاندان کی بھلائی کے لیے","اے ہمارے رب! ہمیں ہماری بیویوں اور اولاد سے آنکھوں کی ٹھنڈک عطا فرما، اور ہمیں پرہیزگاروں کا پیشوا بنا۔"],en:["For family and children","For the good of the family","Our Lord, grant us from our spouses and children the coolness of our eyes, and make us leaders of the righteous."]},
+muqim:{hi:["नमाज़ क़ायम करने की दुआ","अपने और औलाद के लिए","ऐ मेरे रब! मुझे और मेरी औलाद में से (लोगों को) नमाज़ क़ायम करने वाला बना; ऐ हमारे रब! मेरी दुआ क़बूल फ़रमा।"],ur:["نماز قائم کرنے کی دعا","اپنے اور اولاد کے لیے","اے میرے رب! مجھے اور میری اولاد میں سے (لوگوں کو) نماز قائم کرنے والا بنا؛ اے ہمارے رب! میری دعا قبول فرما۔"],en:["To establish prayer","For yourself and your children","My Lord, make me one who establishes prayer, and some of my offspring too. Our Lord, accept my prayer."]},
+taqabbal:{hi:["अमल क़बूल होने की दुआ","हर नेक काम के बाद","ऐ हमारे रब! हम से क़बूल फ़रमा; बेशक तू ही सब कुछ सुनने वाला, जानने वाला है।"],ur:["عمل قبول ہونے کی دعا","ہر نیک کام کے بعد","اے ہمارے رب! ہم سے قبول فرما؛ بے شک تو ہی سب کچھ سننے والا، جاننے والا ہے۔"],en:["For deeds to be accepted","After every good deed","Our Lord, accept this from us; You are the All-Hearing, the All-Knowing."]},
+ighfir:{hi:["मग़फ़िरत और रहमत की दुआ","किसी भी वक़्त","ऐ मेरे रब! माफ़ फ़रमा और रहम फ़रमा, और तू सबसे बेहतर रहम करने वाला है।"],ur:["مغفرت اور رحمت کی دعا","کسی بھی وقت","اے میرے رب! معاف فرما اور رحم فرما، اور تو سب سے بہتر رحم کرنے والا ہے۔"],en:["For forgiveness and mercy","At any time","My Lord, forgive and have mercy, for You are the best of those who show mercy."]},
+hifazat1:{hi:["सुबह-शाम हिफ़ाज़त की दुआ","सुबह और शाम 3 बार","अल्लाह के नाम से जिसके नाम के साथ ज़मीन और आसमान में कोई चीज़ नुक़सान नहीं पहुँचा सकती, और वो सब कुछ सुनने वाला, जानने वाला है।"],ur:["صبح شام حفاظت کی دعا","صبح اور شام 3 بار","اللہ کے نام سے جس کے نام کے ساتھ زمین اور آسمان میں کوئی چیز نقصان نہیں پہنچا سکتی، اور وہ سب کچھ سننے والا، جاننے والا ہے۔"],en:["Morning and evening protection","3 times morning and evening","In the name of Allah, with whose name nothing on earth or in the heavens can cause harm, and He is the All-Hearing, the All-Knowing."]},
+hifazat2:{hi:["हर बुराई से पनाह","शाम को और नई जगह पर 3 बार","मैं अल्लाह के मुकम्मल कलिमात की पनाह माँगता हूँ हर उस चीज़ की बुराई से जो उसने पैदा की।"],ur:["ہر برائی سے پناہ","شام کو اور نئی جگہ پر 3 بار","میں اللہ کے مکمل کلمات کی پناہ مانگتا ہوں ہر اس چیز کی برائی سے جو اس نے پیدا کی۔"],en:["Refuge from every evil","In the evening and at a new place, 3 times","I seek refuge in the perfect words of Allah from the evil of what He has created."]},
+gham:{hi:["फ़िक्र और ग़म से पनाह","परेशानी, क़र्ज़ या कमज़ोरी में","ऐ अल्लाह! मैं तेरी पनाह माँगता हूँ फ़िक्र और ग़म से, मजबूरी और सुस्ती से, कंजूसी और बुज़दिली से, क़र्ज़ के बोझ से और लोगों के ग़लबे से।"],ur:["فکر اور غم سے پناہ","پریشانی، قرض یا کمزوری میں","اے اللہ! میں تیری پناہ مانگتا ہوں فکر اور غم سے، مجبوری اور سستی سے، کنجوسی اور بزدلی سے، قرض کے بوجھ سے اور لوگوں کے غلبے سے۔"],en:["Refuge from worry and grief","In distress, debt or weakness","O Allah, I seek refuge in You from worry and grief, from helplessness and laziness, from miserliness and cowardice, from the burden of debt and from being overpowered by people."]},
+hayyu:{hi:["या हय्यु या क़य्यूम","मुसीबत के वक़्त","ऐ हमेशा ज़िंदा रहने वाले, ऐ सबको थामने वाले! मैं तेरी रहमत के ज़रिए मदद माँगता हूँ।"],ur:["یا حی یا قیوم","مصیبت کے وقت","اے ہمیشہ زندہ رہنے والے، اے سب کو تھامنے والے! میں تیری رحمت کے ذریعے مدد مانگتا ہوں۔"],en:["Ya Hayyu Ya Qayyum","In times of hardship","O Ever-Living, O Sustainer of all, by Your mercy I seek help."]},
+hasbuna:{hi:["हस्बुनल्लाह","डर या ख़तरे के वक़्त","हमारे लिए अल्लाह काफ़ी है और वो बेहतरीन कारसाज़ है।"],ur:["حسبنا اللہ","ڈر یا خطرے کے وقت","ہمارے لیے اللہ کافی ہے اور وہ بہترین کارساز ہے۔"],en:["Hasbunallah","In fear or danger","Allah is sufficient for us, and He is the best Disposer of affairs."]},
+inna_lillah:{hi:["मुसीबत की ख़बर पर","कोई नुक़सान या मौत की ख़बर","बेशक हम अल्लाह ही के हैं और बेशक हम उसी की तरफ़ लौटने वाले हैं।"],ur:["مصیبت کی خبر پر","کوئی نقصان یا موت کی خبر","بے شک ہم اللہ ہی کے ہیں اور بے شک ہم اسی کی طرف لوٹنے والے ہیں۔"],en:["On hearing of a loss","News of a loss or a death","Indeed, we belong to Allah, and indeed to Him we shall return."]},
+gussa:{hi:["ग़ुस्सा आने पर","जब ग़ुस्सा आए","मैं शैतान मरदूद से अल्लाह की पनाह माँगता हूँ।"],ur:["غصہ آنے پر","جب غصہ آئے","میں شیطان مردود سے اللہ کی پناہ مانگتا ہوں۔"],en:["When angry","When anger rises","I seek refuge in Allah from Satan, the accursed."]},
+bimar:{hi:["बीमार की इयादत पर","मरीज़ से मिलते वक़्त","कोई फ़िक्र की बात नहीं, अल्लाह ने चाहा तो यह (बीमारी गुनाहों से) पाक करने वाली है।"],ur:["بیمار کی عیادت پر","مریض سے ملتے وقت","کوئی فکر کی بات نہیں، اللہ نے چاہا تو یہ (بیماری گناہوں سے) پاک کرنے والی ہے۔"],en:["Visiting the sick","When meeting someone who is ill","No harm; it is a purification (from sins), if Allah wills."]}
+};
+
+/* lessons tab, per language */
+const LESSONS={
+rh:`<div class="card"><h3>Islam ke 5 Arkan</h3><ol><li><b>Kalima (Shahadat)</b> — Allah ke siwa koi mabood nahin, Muhammad ﷺ Allah ke Rasool hain</li><li><b>Namaz</b> — din mein 5 waqt</li><li><b>Roza</b> — Ramzan ke mahine mein</li><li><b>Zakat</b> — maal par saal mein ek baar</li><li><b>Hajj</b> — taaqat ho to zindagi mein ek baar</li></ol></div>
+<div class="card"><h3>Iman ki 6 baaten</h3><ol><li>Allah par iman</li><li>Farishton par</li><li>Aasmani kitabon par</li><li>Rasoolon par</li><li>Qayamat ke din par</li><li>Taqdeer (achchhi aur buri) par</li></ol></div>
+<div class="card"><h3>Wuzu ke 4 Farz (Hanafi)</h3><ol><li>Poora chehra dhona</li><li>Dono haath kohniyon samet dhona</li><li>Chauthai sar ka masah karna</li><li>Dono paon takhnon samet dhona</li></ol><p class="note">Shuru mein Bismillah padhein; aakhir mein Kalima-e-Shahadat.</p></div>
+<div class="card"><h3>5 Waqt ki Namaz</h3><ul><li><b>Fajr</b> — 2 farz</li><li><b>Zuhr</b> — 4 farz</li><li><b>Asr</b> — 4 farz</li><li><b>Maghrib</b> — 3 farz</li><li><b>Isha</b> — 4 farz (+ 3 witr)</li></ul><p class="note">Sunnat aur nafl alag hain; ustaad se tafseel seekhein.</p></div>`,
+hi:`<div class="card"><h3>इस्लाम के 5 अरकान</h3><ol><li><b>कलिमा (शहादत)</b> — अल्लाह के सिवा कोई माबूद नहीं, मुहम्मद ﷺ अल्लाह के रसूल हैं</li><li><b>नमाज़</b> — दिन में 5 वक़्त</li><li><b>रोज़ा</b> — रमज़ान के महीने में</li><li><b>ज़कात</b> — माल पर साल में एक बार</li><li><b>हज</b> — ताक़त हो तो ज़िंदगी में एक बार</li></ol></div>
+<div class="card"><h3>ईमान की 6 बातें</h3><ol><li>अल्लाह पर ईमान</li><li>फ़रिश्तों पर</li><li>आसमानी किताबों पर</li><li>रसूलों पर</li><li>क़यामत के दिन पर</li><li>तक़दीर (अच्छी और बुरी) पर</li></ol></div>
+<div class="card"><h3>वुज़ू के 4 फ़र्ज़ (हनफ़ी)</h3><ol><li>पूरा चेहरा धोना</li><li>दोनों हाथ कोहनियों समेत धोना</li><li>चौथाई सर का मसह करना</li><li>दोनों पाँव टख़नों समेत धोना</li></ol><p class="note">शुरू में बिस्मिल्लाह पढ़ें; आख़िर में कलिमा-ए-शहादत।</p></div>
+<div class="card"><h3>5 वक़्त की नमाज़</h3><ul><li><b>फ़ज्र</b> — 2 फ़र्ज़</li><li><b>ज़ुहर</b> — 4 फ़र्ज़</li><li><b>अस्र</b> — 4 फ़र्ज़</li><li><b>मग़रिब</b> — 3 फ़र्ज़</li><li><b>इशा</b> — 4 फ़र्ज़ (+ 3 वित्र)</li></ul><p class="note">सुन्नत और नफ़्ल अलग हैं; उस्ताद से तफ़्सील सीखें।</p></div>`,
+ur:`<div class="card"><h3>اسلام کے 5 ارکان</h3><ol><li><b>کلمہ (شہادت)</b> — اللہ کے سوا کوئی معبود نہیں، محمد ﷺ اللہ کے رسول ہیں</li><li><b>نماز</b> — دن میں 5 وقت</li><li><b>روزہ</b> — رمضان کے مہینے میں</li><li><b>زکوٰۃ</b> — مال پر سال میں ایک بار</li><li><b>حج</b> — استطاعت ہو تو زندگی میں ایک بار</li></ol></div>
+<div class="card"><h3>ایمان کی 6 باتیں</h3><ol><li>اللہ پر ایمان</li><li>فرشتوں پر</li><li>آسمانی کتابوں پر</li><li>رسولوں پر</li><li>قیامت کے دن پر</li><li>تقدیر (اچھی اور بری) پر</li></ol></div>
+<div class="card"><h3>وضو کے 4 فرض (حنفی)</h3><ol><li>پورا چہرہ دھونا</li><li>دونوں ہاتھ کہنیوں سمیت دھونا</li><li>چوتھائی سر کا مسح کرنا</li><li>دونوں پاؤں ٹخنوں سمیت دھونا</li></ol><p class="note">شروع میں بسم اللہ پڑھیں؛ آخر میں کلمۂ شہادت۔</p></div>
+<div class="card"><h3>5 وقت کی نماز</h3><ul><li><b>فجر</b> — 2 فرض</li><li><b>ظہر</b> — 4 فرض</li><li><b>عصر</b> — 4 فرض</li><li><b>مغرب</b> — 3 فرض</li><li><b>عشاء</b> — 4 فرض (+ 3 وتر)</li></ul><p class="note">سنت اور نفل الگ ہیں؛ استاد سے تفصیل سیکھیں۔</p></div>`,
+en:`<div class="card"><h3>The 5 Pillars of Islam</h3><ol><li><b>Shahadah</b> — there is no god but Allah, and Muhammad ﷺ is the Messenger of Allah</li><li><b>Salah</b> — 5 times a day</li><li><b>Fasting</b> — in the month of Ramadan</li><li><b>Zakat</b> — once a year on wealth</li><li><b>Hajj</b> — once in a lifetime, if able</li></ol></div>
+<div class="card"><h3>The 6 Articles of Faith</h3><ol><li>Belief in Allah</li><li>In the angels</li><li>In the revealed books</li><li>In the messengers</li><li>In the Day of Judgement</li><li>In divine decree (good and bad)</li></ol></div>
+<div class="card"><h3>4 Obligatory acts of Wudu (Hanafi)</h3><ol><li>Wash the whole face</li><li>Wash both arms up to and including the elbows</li><li>Wipe a quarter of the head</li><li>Wash both feet up to and including the ankles</li></ol><p class="note">Say Bismillah at the start and the Shahadah at the end.</p></div>
+<div class="card"><h3>The 5 Daily Prayers</h3><ul><li><b>Fajr</b> — 2 fard</li><li><b>Zuhr</b> — 4 fard</li><li><b>Asr</b> — 4 fard</li><li><b>Maghrib</b> — 3 fard</li><li><b>Isha</b> — 4 fard (+ 3 witr)</li></ul><p class="note">Sunnah and nafl prayers are separate; learn the details from a teacher.</p></div>`
+};
+
+/* Devanagari pronunciation → Roman letters, for Hinglish and English */
+const DEV_C={"क":"k","ख":"kh","ग":"g","घ":"gh","ङ":"n","च":"ch","छ":"chh","ज":"j","झ":"jh","ञ":"n","ट":"t","ठ":"th","ड":"d","ढ":"dh","ण":"n","त":"t","थ":"th","द":"d","ध":"dh","न":"n","प":"p","फ":"ph","ब":"b","भ":"bh","म":"m","य":"y","र":"r","ल":"l","व":"w","श":"sh","ष":"sh","स":"s","ह":"h","क़":"q","ख़":"kh","ग़":"gh","ज़":"z","ड़":"r","फ़":"f"};
+const DEV_N={"क":"q","ख":"kh","ग":"gh","ज":"z","ड":"r","फ":"f"};
+const DEV_V={"अ":"a","आ":"aa","इ":"i","ई":"ee","उ":"u","ऊ":"oo","ए":"e","ऐ":"ai","ओ":"o","औ":"au"};
+const DEV_M={"ा":"aa","ि":"i","ी":"ee","ु":"u","ू":"oo","े":"e","ै":"ai","ो":"o","ौ":"au"};
+function devToRoman(s){let o="";const c=[...s];
+  for(let i=0;i<c.length;i++){const ch=c[i];
+    if(DEV_C[ch]!==undefined){let r=DEV_C[ch];if(c[i+1]==="़"){r=DEV_N[ch]||r;i++}
+      const nx=c[i+1];
+      if(DEV_M[nx]!==undefined){r+=DEV_M[nx];i++}
+      else if(nx==="्"){i++}
+      else if(nx===undefined||/[\s\-]/.test(nx)){}
+      else r+="a";
+      o+=r}
+    else if(DEV_V[ch]!==undefined)o+=DEV_V[ch];
+    else if(ch==="ं"||ch==="ँ")o+="n";
+    else if(ch==="्"||ch==="़")continue;
+    else o+=ch}
+  return o}
+
 const DUAS=RAW.map((r,n)=>{const a=r[4].split(" "),h=r[5].split(" ");
   return{n:n+1,id:r[0],cat:r[1],name:r[2],occ:r[3],w:a.map((x,i)=>[x,h[i]==="_"?"":h[i].replace(/_/g," ")]),t:r[6],ref:r[7],q:r[8]||""}});
 const CATS=[...new Set(DUAS.map(d=>d.cat))];
 
 const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let learned=store.get("nm_learned",[]);
+function detectLang(){const n=(navigator.language||"").toLowerCase();return n.startsWith("ur")?"ur":n.startsWith("en")&&!n.endsWith("in")?"en":"rh"}
+let LANG=store.get("nm_lang",null)||detectLang();if(!LANGS.find(l=>l[0]===LANG))LANG="rh";
+const LI=()=>LANGS.findIndex(l=>l[0]===LANG);
+const T=k=>(UI[k]||[k])[LI()]||UI[k][0];
+const dname=d=>LANG==="rh"?d.name:DT[d.id][LANG][0];
+const docc=d=>LANG==="rh"?d.occ:DT[d.id][LANG][1];
+const dt=d=>LANG==="rh"?d.t:DT[d.id][LANG][2];
+const dcat=c=>(CATS_T[c]||[c])[LI()];
+function dref(d){let r=d.ref;(REF_T[LANG]||[]).forEach(([a,b])=>{r=r.split(a).join(b)});return r}
+function talaffuz(p){if(!p[1]||LANG==="ur")return "";if(LANG==="hi")return p[1];
+  const r=devToRoman(p[1]);return r.replace(/(^|\s)([bcdfghjklmnpqrstvwxyz])(?=\s|$)/g,"$1$2a")}
 let cur=0, audios={};
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $=id=>document.getElementById(id);
@@ -514,7 +691,8 @@ document.querySelectorAll("canvas.pat").forEach(startPattern);
 function renderWords(el,d){
   el.innerHTML="";
   d.w.forEach((p,i)=>{const s=document.createElement("span");s.className="w";s.dataset.i=i;
-    s.innerHTML=`<span class="a">${p[0]}</span><span class="tr">${p[1]||"&nbsp;"}</span>`;el.appendChild(s)});
+    s.innerHTML=`<span class="a">${p[0]}</span><span class="tr">${talaffuz(p)||"&nbsp;"}</span>`;el.appendChild(s)});
+  el.classList.toggle("no-tr",LANG==="ur");
 }
 function setActive(el,i){[...el.children].forEach((c,k)=>{c.classList.toggle("on",k===i);c.classList.toggle("past",k<i)})}
 function wordDur(d,speed){return d.w.map(p=>(450+p[0].length*95)/speed)}
@@ -539,16 +717,21 @@ function sayFlow(d,voice,rate,onWord){return new Promise(res=>{
     u.onboundary=e=>{if(e.name&&e.name!=="word")return;gotBoundary=true;let i=0;while(i+1<starts.length&&starts[i+1]<=e.charIndex)i++;onWord(i)};
     u.onend=fin;u.onerror=fin;timers.push(setTimeout(fin,est*3+4000));speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){fin()}})}
 function fillVoiceSel(){const s=$("voiceSel");if(!s)return;const L=arVoices(),cur=arV();
-  s.innerHTML=L.length?L.map(v=>`<option value="${v.voiceURI.replace(/"/g,"&quot;")}"${cur&&v.voiceURI===cur.voiceURI?" selected":""}>${v.name} (${v.lang})</option>`).join(""):'<option>Koi Arabic awaaz nahin mili</option>';
+  s.innerHTML=L.length?L.map(v=>`<option value="${v.voiceURI.replace(/"/g,"&quot;")}"${cur&&v.voiceURI===cur.voiceURI?" selected":""}>${v.name} (${v.lang})</option>`).join(""):'<option>'+T("no_ar")+'</option>';
   s.disabled=!L.length}
 const hiV=()=>VOICES.find(v=>/^hi/i.test(v.lang))||VOICES.find(v=>/^ur/i.test(v.lang));
+/* voice for speaking the translation in the chosen language (Hinglish is read from the हिन्दी text) */
+function trVoice(){const f=re=>VOICES.find(v=>re.test(v.lang));
+  if(LANG==="en"){const v=f(/^en[-_]IN/i)||f(/^en/i);return v&&{v,text:dt}}
+  if(LANG==="ur"){const v=f(/^ur/i);if(v)return {v,text:dt};const h=f(/^hi/i);return h&&{v:h,text:d=>DT[d.id].hi[2]}}
+  const v=f(/^hi/i);return v&&{v,text:d=>DT[d.id].hi[2]}}
 function say(text,lang,voice,rate){return new Promise(res=>{
   try{const u=new SpeechSynthesisUtterance(text);u.lang=lang;if(voice)u.voice=voice;u.rate=rate;
     let done=false;const fin=()=>{if(!done){done=true;clearTimeout(g);res()}};
     const g=setTimeout(fin,Math.max(2500,text.length*260/rate));
     u.onend=fin;u.onerror=fin;speechSynthesis.speak(u)}catch(e){res()}})}
 function updateVoiceNote(){const el=$("voiceNote");if(!el)return;
-  try{updateSrc()}catch(e){}el.textContent=arV()?"Sabse saaf Arabic awaaz apne aap chuni gayi hai. Neeche se badal bhi sakte hain; naam mein 'Natural' ya 'Online' wali awaaz sabse saaf hoti hai.":"Is device mein Arabic awaaz nahin hai. Android: Settings → Text-to-speech → Google speech engine → Install voice data → Arabic. Windows: Microsoft Edge mein app kholein (Natural Arabic awaaz milti hai).";}
+  try{updateSrc()}catch(e){}el.textContent=arV()?T("voice_ok"):T("voice_none");return;el.textContent=arV()?"Sabse saaf Arabic awaaz apne aap chuni gayi hai. Neeche se badal bhi sakte hain; naam mein 'Natural' ya 'Online' wali awaaz sabse saaf hoti hai.":"Is device mein Arabic awaaz nahin hai. Android: Settings → Text-to-speech → Google speech engine → Install voice data → Arabic. Windows: Microsoft Edge mein app kholein (Natural Arabic awaaz milti hai).";}
 
 /* Player: highlights words by timer, by device voice (word by word), or by an <audio> file */
 function Player(el,onEnd){
@@ -567,7 +750,7 @@ function Player(el,onEnd){
       else{const durs=wordDur(d,speed);
         for(let i=0;i<d.w.length;i++){if(my!==token)return;setActive(el,i);await new Promise(r=>setTimeout(r,durs[i]))}}
       if(my!==token)return;setActive(el,d.w.length);
-      if(opt.voice&&opt.hindi&&hiV())await say(d.t,"hi-IN",hiV(),Math.min(1.1,speed));
+      if(opt.voice&&opt.hindi){const tv=trVoice();if(tv)await say(tv.text(d),tv.v.lang,tv.v,Math.min(1.1,speed))}
       await new Promise(r=>setTimeout(r,600));
       if(my!==token)return;token++;onEnd&&onEnd();
     },
@@ -577,10 +760,10 @@ function Player(el,onEnd){
 }
 function audioFor(d){return audios[d.id]?audios[d.id].el:null}
 function srcLabel(d,voiceOn){
-  if(audios[d.id])return "♪ Recording: "+audios[d.id].name;
-  if(shared[d.id])return "♪ Recording (load ho rahi hai…)";
-  if(voiceOn&&arV())return "🔊 Arabic awaaz: "+arV().name;
-  return "Awaaz uplabdh nahin: sirf alfaaz chalenge";
+  if(audios[d.id])return T("src_rec")+audios[d.id].name;
+  if(shared[d.id])return T("src_loading");
+  if(voiceOn&&arV())return T("src_voice")+arV().name;
+  return T("src_none");
 }
 
 /* ---------- shared recordings: stored once with the app, heard by every viewer ---------- */
@@ -604,10 +787,10 @@ async function saveShared(d,f){
   if(!DB||!ASSETS){const ok=await idbDo("readwrite",s=>s.put({id:d.id,name:f.name,blob:f},d.id));return ok?"local":false}
   try{const up=await ASSETS.upload(new Blob([await b64(f)],{type:"text/plain"}));
     await DB.doc("audio/"+d.id).set({asset:up.id,name:f.name,type:f.type||"audio/mpeg",n:d.n});return "shared"}
-  catch(e){$("packNote").textContent="Recording save nahin hui ("+(e&&e.code||"error")+"). Is device par chalegi.";return false}}
+  catch(e){$("packNote").textContent=T("save_fail")+" ("+(e&&e.code||"error")+")";return false}}
 (async()=>{
   try{DB=await claude.use("db");ASSETS=await claude.use("assets")}catch(e){}
-  $("shareNote").textContent=ASSETS?"Aap jo recording lagayenge woh app mein save ho jayegi; har student ko apne aap sunai degi.":"Aap jo recording lagayenge woh is device mein save rahegi aur agli baar bhi chalegi.";
+  $("shareNote").dataset.i18n=ASSETS?"share_on":"share_local";$("shareNote").textContent=T($("shareNote").dataset.i18n);
   if(!DB){await loadLocalAll();return}
   DB.collection("audio").onSnapshot(q=>{shared={};q.docs.forEach(x=>{const v=x.data();if(v&&v.asset)shared[x.id]=v});
     Object.keys(audios).forEach(k=>{if(audios[k].shared&&!shared[k])delete audios[k]});
@@ -617,23 +800,28 @@ async function saveShared(d,f){
 /* ---------- Duaen tab ---------- */
 const words1=$("words1");
 let playing1=false;
-const setPlay1=on=>{playing1=on;$("play1").textContent=on?"■ Rokein":"🔊 Audio ke saath chalayein"};
+const setPlay1=on=>{playing1=on;$("play1").textContent=on?T("stop"):T("play")};
 const p1=Player(words1,()=>{if(playing1&&pressed("cont1")){cur=(cur+1)%DUAS.length;show(true);setPlay1(true);setTimeout(()=>playing1&&p1.play(DUAS[cur],opts1()),400)}else setPlay1(false)});
 function updateSrc(){$("src1").textContent=srcLabel(DUAS[cur],pressed("speak1"))}
 const pressed=id=>$(id).getAttribute("aria-pressed")==="true";
 const togglePress=id=>{const b=$(id);b.setAttribute("aria-pressed",!pressed(id));return pressed(id)};
 
-$("cat1").innerHTML='<option value="">Sab ('+DUAS.length+')</option>'+CATS.map(c=>`<option>${c}</option>`).join("");
+function fillCats(){const v1=$("cat1").value,v2=$("cat2").value;
+  $("cat1").innerHTML='<option value="">'+T("all")+' ('+DUAS.length+')</option>'+CATS.map(c=>`<option value="${c}">${dcat(c)}</option>`).join("");
+  $("cat2").innerHTML='<option value="">'+T("all_duas")+'</option>'+CATS.map(c=>`<option value="${c}">${dcat(c)}</option>`).join("");
+  $("cat1").value=v1;$("cat2").value=v2;
+  const vv=$("vidDua").value;$("vidDua").innerHTML=DUAS.map((d,i)=>`<option value="${i}">${d.n}. ${dname(d)}</option>`).join("");$("vidDua").value=vv||"0"}
+fillCats();
 function renderList(){
   const L=$("list");L.innerHTML="";let last="";
   const q=$("q1").value.trim().toLowerCase(),cf=$("cat1").value;
-  const vis=DUAS.filter(d=>(!cf||d.cat===cf)&&(!q||(d.name+" "+d.occ+" "+d.t+" "+d.n).toLowerCase().includes(q)));
+  const vis=DUAS.filter(d=>(!cf||d.cat===cf)&&(!q||(dname(d)+" "+docc(d)+" "+dt(d)+" "+d.name+" "+d.n).toLowerCase().includes(q)));
   vis.forEach(d=>{
-    if(d.cat!==last){last=d.cat;const c=document.createElement("div");c.className="cat";c.textContent=d.cat;L.appendChild(c)}
+    if(d.cat!==last){last=d.cat;const c=document.createElement("div");c.className="cat";c.textContent=dcat(d.cat);L.appendChild(c)}
     const i=DUAS.indexOf(d),b=document.createElement("button");b.className="item";b.setAttribute("aria-current",i===cur);
-    b.innerHTML=`<span><span class="num">${d.n}</span> ${d.name} ${learned.includes(d.id)?'<span class="done">✓</span>':''}${(audios[d.id]||shared[d.id])?' <span class="has">♪</span>':''}</span><span class="ar">${d.w[0][0]}</span>`;
+    b.innerHTML=`<span><span class="num">${d.n}</span> ${dname(d)} ${learned.includes(d.id)?'<span class="done">✓</span>':''}${(audios[d.id]||shared[d.id])?' <span class="has">♪</span>':''}</span><span class="ar">${d.w[0][0]}</span>`;
     b.onclick=()=>{cur=i;show()};L.appendChild(b)});
-  if(!vis.length)L.innerHTML='<p class="note">Koi dua nahin mili. Doosra lafz likh kar dekhein.</p>';
+  if(!vis.length)L.innerHTML='<p class="note">'+T("not_found")+'</p>';
   $("progN").textContent=learned.length;$("progT").textContent=DUAS.length;
 }
 $("q1").oninput=renderList;$("cat1").onchange=renderList;
@@ -641,14 +829,14 @@ function show(keep){
   if(!keep){p1.stop();setPlay1(false)}
   loadShared(DUAS[cur]);
   const d=DUAS[cur];
-  $("occ1").textContent=d.occ;$("title1").textContent=d.n+". "+d.name;$("tar1").textContent=d.t;
-  $("tarFull").textContent=d.t;$("ref1").textContent="Hawala: "+d.ref;
+  $("occ1").textContent=docc(d);$("title1").textContent=d.n+". "+dname(d);$("tar1").textContent=dt(d);
+  $("tarFull").textContent=dt(d);$("ref1").textContent=T("hawala")+": "+dref(d);
   const qa=$("qari1");if(d.q){const [s,a]=d.q.split(":");qa.href=`https://quran.com/${s}/${a}`;qa.hidden=false}else qa.hidden=true;
   renderWords(words1,d);
   words1.querySelectorAll(".w").forEach(w=>w.onclick=()=>{p1.stop();setPlay1(false);const i=+w.dataset.i;setActive(words1,i);
     if(pressed("speak1")&&arV()){try{speechSynthesis.cancel()}catch(e){}say(d.w[i][0],"ar-SA",arV(),.7)}});
-  $("mark1").textContent=learned.includes(d.id)?"↺ Dobara seekhein":"✓ Yaad ho gayi";
-  $("audName").textContent=audios[d.id]?"Is dua ki audio: "+audios[d.id].name:"";
+  $("mark1").textContent=learned.includes(d.id)?T("unmark"):T("mark");
+  $("audName").textContent=audios[d.id]?T("this_audio")+audios[d.id].name:"";
   $("aud1").value="";$("del1").hidden=!((ASSETS&&shared[d.id])||(audios[d.id]&&audios[d.id].local));
   renderList();updateSrc();
 }
@@ -669,16 +857,16 @@ $("prev1").onclick=()=>{cur=(cur-1+DUAS.length)%DUAS.length;show()};
 $("next1").onclick=()=>{cur=(cur+1)%DUAS.length;show()};
 function attach(d,f){if(audios[d.id])URL.revokeObjectURL(audios[d.id].el.src);audios[d.id]={el:new Audio(URL.createObjectURL(f)),name:f.name}}
 $("aud1").onchange=async e=>{const f=e.target.files[0];if(!f)return;const d=DUAS[cur];attach(d,f);show();
-  $("audName").textContent="Save ho rahi hai…";const r=await saveShared(d,f);if(r){audios[d.id][r]=true;show();$("audName").textContent="Save ho gayi: "+f.name}else show()};
+  $("audName").textContent=T("saving");const r=await saveShared(d,f);if(r){audios[d.id][r]=true;show();$("audName").textContent=T("saved")+f.name}else show()};
 /* audio pack: many files at once, matched by number at the start of the name (e.g. 07.mp3) or by dua id */
 $("pack1").onchange=async e=>{let ok=0,miss=[],matched=[];
   [...e.target.files].forEach(f=>{const base=f.name.replace(/\.[^.]+$/,"").toLowerCase();
     const m=base.match(/^\s*0*(\d{1,3})/);let d=m?DUAS[+m[1]-1]:null;if(!d)d=DUAS.find(x=>base.includes(x.id));
     if(d){attach(d,f);ok++;matched.push([d,f])}else miss.push(f.name)});
-  $("packNote").textContent=`${ok} audio file duaon se jud gayin.`+(miss.length?` In ka number nahin mila: ${miss.slice(0,4).join(", ")}${miss.length>4?"…":""}`:"");
+  $("packNote").textContent=`${ok} ${T("matched")}`+(miss.length?` ${T("nomatch")} ${miss.slice(0,4).join(", ")}${miss.length>4?"…":""}`:"");
   e.target.value="";show();
-  if(matched.length){let k=0;for(const [d,f] of matched){$("packNote").textContent=`Save ho rahi hain: ${++k}/${matched.length}`;const r=await saveShared(d,f);if(r)audios[d.id][r]=true}
-    $("packNote").textContent=`${k} recordings app mein save ho gayin.`}};
+  if(matched.length){let k=0;for(const [d,f] of matched){$("packNote").textContent=`${T("saving_n")} ${++k}/${matched.length}`;const r=await saveShared(d,f);if(r)audios[d.id][r]=true}
+    $("packNote").textContent=`${k} ${T("saved_n")}`}};
 
 /* ---------- Display tab ---------- */
 let di=0,rep=0,auto=false;
@@ -686,13 +874,12 @@ const words2=$("words2");
 const p2=Player(words2,()=>{if(!auto)return;rep++;
   if(rep>=+$("rep2").value){rep=0;di=(di+1)%DUAS.length;showD()}
   setTimeout(()=>auto&&run2(),reduce?400:1200)});
-$("cat2").innerHTML='<option value="">Sab duaen</option>'+CATS.map(c=>`<option>${c}</option>`).join("");
-function showD(){const d=DUAS[di];$("occ2").textContent=d.occ;$("title2").textContent=d.n+". "+d.name;$("tar2").textContent=d.t;renderWords(words2,d)}
+function showD(){const d=DUAS[di];$("occ2").textContent=docc(d);$("title2").textContent=d.n+". "+dname(d);$("tar2").textContent=dt(d);renderWords(words2,d)}
 async function run2(){const cf=$("cat2").value;if(cf&&DUAS[di].cat!==cf){di=DUAS.findIndex((d,i)=>i>=di&&d.cat===cf);if(di<0)di=DUAS.findIndex(d=>d.cat===cf);showD()}
   const d=DUAS[di];await loadShared(d);p2.play(d,{speed:1,voice:pressed("speak2"),hindi:pressed("hindi2"),audio:audioFor(d)})}
 $("speak2").onclick=()=>togglePress("speak2");$("hindi2").onclick=()=>togglePress("hindi2");
 $("cat2").onchange=()=>{const cf=$("cat2").value;if(cf){di=DUAS.findIndex(d=>d.cat===cf);rep=0;p2.stop();showD();if(auto)run2()}};
-$("play2").onclick=()=>{auto=!auto;$("play2").textContent=auto?"■ Rokein":"▶ Auto-chalayein";if(auto){rep=0;run2()}else p2.stop()};
+$("play2").onclick=()=>{auto=!auto;$("play2").textContent=auto?T("stop"):T("autoplay");if(auto){rep=0;run2()}else p2.stop()};
 $("next2").onclick=()=>{p2.stop();di=(di+1)%DUAS.length;rep=0;showD();if(auto)run2()};
 $("prev2").onclick=()=>{p2.stop();di=(di-1+DUAS.length)%DUAS.length;rep=0;showD();if(auto)run2()};
 $("fs2").onclick=()=>{const s=$("stage2");try{const r=(s.requestFullscreen||s.webkitRequestFullscreen).call(s);r&&r.catch&&r.catch(()=>{})}catch(e){}};
@@ -701,12 +888,11 @@ $("fs2").onclick=()=>{const s=$("stage2");try{const r=(s.requestFullscreen||s.we
 const words3=$("words3"),vid=$("vid");let vOn=false;
 const runV=async()=>{const d=DUAS[+$("vidDua").value];await loadShared(d);p3.play(d,{speed:.9,voice:pressed("speak3"),audio:audioFor(d)})};
 const p3=Player(words3,()=>{if(vOn)setTimeout(()=>vOn&&runV(),1500)});
-$("vidDua").innerHTML=DUAS.map((d,i)=>`<option value="${i}">${d.n}. ${d.name}</option>`).join("");
-function showV(){const d=DUAS[+$("vidDua").value];renderWords(words3,d);$("tar3").textContent=d.t}
+function showV(){const d=DUAS[+$("vidDua").value];renderWords(words3,d);$("tar3").textContent=dt(d)}
 $("speak3").onclick=()=>togglePress("speak3");
 $("vidDua").onchange=()=>{p3.stop();showV();if(vOn)runV()};
 $("vidIn").onchange=e=>{const f=e.target.files[0];if(!f)return;if(vid.src)URL.revokeObjectURL(vid.src);vid.src=URL.createObjectURL(f);$("vidEmpty").hidden=true};
-$("vidPlay").onclick=()=>{vOn=!vOn;$("vidPlay").textContent=vOn?"■ Rokein":"▶ Chalayein";
+$("vidPlay").onclick=()=>{vOn=!vOn;$("vidPlay").textContent=vOn?T("stop"):T("vplay");
   if(vOn){if(vid.src)vid.play().catch(()=>{});runV()}else{vid.pause();p3.stop()}};
 
 /* ---------- tabs ---------- */
@@ -714,11 +900,20 @@ document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));
   ["duaen","display","video","sabak"].forEach(id=>$(id).hidden=id!==b.dataset.tab);
   p1.stop();setPlay1(false);
-  if(auto){auto=false;p2.stop();$("play2").textContent="▶ Auto-chalayein"}
-  if(vOn){vOn=false;p3.stop();vid.pause();$("vidPlay").textContent="▶ Chalayein"}
+  if(auto){auto=false;p2.stop();$("play2").textContent=T("autoplay")}
+  if(vOn){vOn=false;p3.stop();vid.pause();$("vidPlay").textContent=T("vplay")}
 });
 const h=(location.hash||"").slice(1);if(["display","video","sabak"].includes(h))document.querySelector(`[data-tab="${h}"]`).click();
 
-loadVoices();show();showD();showV();updateVoiceNote();
+/* ---------- language ---------- */
+function applyLang(){const html=document.documentElement;html.lang=LANG;html.dir=LANG==="ur"?"rtl":"ltr";
+  document.querySelectorAll("[data-i18n]").forEach(e=>{e.textContent=T(e.dataset.i18n)});
+  document.querySelectorAll("[data-i18n-ph]").forEach(e=>{e.placeholder=T(e.dataset.i18nPh);e.setAttribute("aria-label",T(e.dataset.i18nPh))});
+  $("lessons").innerHTML=LESSONS[LANG];
+  if(playing1)$("play1").textContent=T("stop");if(auto)$("play2").textContent=T("stop");if(vOn)$("vidPlay").textContent=T("stop");
+  fillCats();fillVoiceSel();show(true);showD();showV();updateVoiceNote()}
+$("langSel").innerHTML=LANGS.map(([k,n])=>`<option value="${k}">${n}</option>`).join("");$("langSel").value=LANG;
+$("langSel").onchange=e=>{LANG=e.target.value;store.set("nm_lang",LANG);applyLang()};
+loadVoices();show();showD();showV();applyLang();
 </script>
 <script>if(window.AndroidTTS){var f=document.getElementById("fs2");if(f)f.hidden=true}</script></body></html>

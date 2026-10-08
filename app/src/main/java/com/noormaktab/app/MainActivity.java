@@ -141,7 +141,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
         runOnUiThread(() -> web.evaluateJavascript("window.__ttsReady&&window.__ttsReady()", null));
     }
 
-    /** Arabic, Hindi and Urdu voices that are installed, best quality first. */
+    /** Arabic, Hindi, Urdu and English voices that are installed, best quality first. */
     private void collectVoices() {
         voiceList.clear();
         try {
@@ -149,7 +149,7 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
             if (all != null) {
                 for (Voice v : all) {
                     String lang = v.getLocale().getLanguage();
-                    if (!(lang.equals("ar") || lang.equals("hi") || lang.equals("ur"))) continue;
+                    if (!(lang.equals("ar") || lang.equals("hi") || lang.equals("ur") || lang.equals("en"))) continue;
                     Set<String> f = v.getFeatures();
                     if (f != null && f.contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)) continue;
                     voiceList.add(v);
