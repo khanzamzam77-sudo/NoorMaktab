@@ -141,15 +141,13 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
         runOnUiThread(() -> web.evaluateJavascript("window.__ttsReady&&window.__ttsReady()", null));
     }
 
-    /** Arabic, Hindi, Urdu and English voices that are installed, best quality first. */
+    /** All installed voices, best quality first (Arabic for the duas, others for spoken translations). */
     private void collectVoices() {
         voiceList.clear();
         try {
             Set<Voice> all = tts.getVoices();
             if (all != null) {
                 for (Voice v : all) {
-                    String lang = v.getLocale().getLanguage();
-                    if (!java.util.Arrays.asList("ar","hi","ur","en","bn","id","in","ms","tr","fa","fr","es","de","ru","sw").contains(lang)) continue;
                     Set<String> f = v.getFeatures();
                     if (f != null && f.contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)) continue;
                     voiceList.add(v);
@@ -174,10 +172,12 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
             JSONArray out = new JSONArray();
             if (!ttsReady) return out.toString();
             try {
-                int n = 0;
+                java.util.Map<String, Integer> count = new java.util.HashMap<>();
                 for (Voice v : voiceList) {
-                    n++;
                     Locale loc = v.getLocale();
+                    Integer c = count.get(loc.getLanguage());
+                    int n = (c == null ? 0 : c) + 1;
+                    count.put(loc.getLanguage(), n);
                     String langName = loc.getLanguage().equals("ar") ? "Arabic" : loc.getDisplayLanguage(Locale.ENGLISH);
                     String label = langName + " " + n
                             + (v.getQuality() >= Voice.QUALITY_HIGH ? " · Natural" : "")
